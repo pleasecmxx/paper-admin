@@ -65,7 +65,7 @@ let globalSettings = {
     // 是否开启控制台
     enableDashboard: true,
     // 控制台名称
-    dashboardTitle: '控制台',
+    dashboardTitle: '数据看板',
     // 是否在非开发环境开启错误日志功能，具体业务代码在 ./util/error.log.js
     enableErrorLog: false,
     // 是否开启主题配置（建议在生产环境关闭）

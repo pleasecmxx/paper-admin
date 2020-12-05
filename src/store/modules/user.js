@@ -25,6 +25,7 @@ const actions = {
         return new Promise(resolve => {
             // 通过 mock 进行登录
             api.post('mock/member/login', data).then(res => {
+                console.log(res)
                 commit('setUserData', res.data)
                 resolve()
             })

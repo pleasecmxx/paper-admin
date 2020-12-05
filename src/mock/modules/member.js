@@ -18,13 +18,14 @@ module.exports = [
         url: 'member/permission',
         type: 'get',
         result: option => {
+            // console.log("option-----------",option)
             let permissions = []
             if (option.query.account == 'admin') {
                 permissions = [
-                    'permission.browse',
-                    'permission.create',
-                    'permission.edit',
-                    'permission.remove'
+                    'platfrom.browse',
+                    'platfrom.create',
+                    'platfrom.edit',
+                    'platfrom.remove'
                 ]
             } else if (option.query.account == 'test') {
                 permissions = [

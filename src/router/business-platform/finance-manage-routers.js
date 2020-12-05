@@ -16,7 +16,8 @@ export default {
             name: '提现审核',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/finance-manage/TakeCashManage'),
             meta: {
-                title: '提现审核'
+                title: '提现审核',
+                auth: ['platfrom.browse']
             }
         },
     ]

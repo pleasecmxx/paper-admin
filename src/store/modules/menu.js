@@ -4,6 +4,7 @@ function hasPermission(permissions, route) {
     let isAuth = false
     if (route.meta && route.meta.auth) {
         isAuth = permissions.some(auth => {
+            console.log('route.meta.auth',route.meta.auth,auth)
             if (typeof route.meta.auth == 'string') {
                 return route.meta.auth === auth
             } else {
