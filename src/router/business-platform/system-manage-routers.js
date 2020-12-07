@@ -8,7 +8,8 @@ export default {
     name: '系统管理',
     meta: {
         title: '系统管理',
-        icon: 'el-icon-setting'
+        icon: 'el-icon-setting',
+        auth: ['platform.browse','admin']
     },
     children: [
         {
@@ -16,7 +17,8 @@ export default {
             name: '基础系统配置',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/system-manage/NormalConfig'),
             meta: {
-                title: '基础系统配置'
+                title: '基础系统配置',
+                auth: ['platform.browse','admin']
             }
         },
         {
@@ -24,7 +26,8 @@ export default {
             name: '加盟渠道配置',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/system-manage/JoinWayManage'),
             meta: {
-                title: '加盟渠道配置'
+                title: '加盟渠道配置',
+                auth: ['platform.browse','admin']
             }
         },
         {
@@ -32,7 +35,8 @@ export default {
             name: '问题解答管理',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/system-manage/SolutionManage'),
             meta: {
-                title: '问题解答管理'
+                title: '问题解答管理',
+                auth: ['platform.browse','admin']
             }
         }
     ]

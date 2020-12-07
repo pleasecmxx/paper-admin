@@ -8,7 +8,7 @@ export default {
     name: '代理-财务管理',
     meta: {
         title: '代理财务管理',
-        icon: 'el-icon-wallet'
+        icon: 'el-icon-wallet',
     },
     children: [
         {
@@ -16,7 +16,8 @@ export default {
             name: '代理-财务提现',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-agent/finance-manage/TakeCashManage'),
             meta: {
-                title: '财务提现'
+                title: '财务提现',
+                auth: ['agent.browse']
             }
         },
     ]

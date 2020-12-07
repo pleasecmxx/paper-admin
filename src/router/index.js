@@ -121,12 +121,14 @@ let asyncRoutes = [
             UserManageRouters,
             OrderManageRouters,
             FinanceManageRouters,
-
             SystemManageRouters,
-            //代理端路由
+
+            //店铺端路由
             ShopSystemConfig,
             ShopFinanceManageRouters,
             ShopOrderManage,
+
+            //代理端路由
             AgentShopManage,
             AgentOrderManage,
             AgentFinanceManageRouters,
@@ -178,6 +180,8 @@ router.beforeEach(async(to, from, next) => {
         router.addRoutes(accessRoutes)
         router.addRoutes(lastRoute)
         next({ ...to, replace: true })
+    }else {
+        // alert('1')
     }
     if (store.state.menu.isGenerate) {
         store.commit('menu/setHeaderActived', to.path)

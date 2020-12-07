@@ -4,7 +4,7 @@ function hasPermission(permissions, route) {
     let isAuth = false
     if (route.meta && route.meta.auth) {
         isAuth = permissions.some(auth => {
-            console.log('route.meta.auth',route.meta.auth,auth)
+            // console.log('route.meta.auth',route.meta.auth,auth)
             if (typeof route.meta.auth == 'string') {
                 return route.meta.auth === auth
             } else {
@@ -55,6 +55,7 @@ const actions = {
             let accessedRoutes
             // 判断权限功能是否开启
             if (rootState.settings.openPermission) {
+                console.log("bbb")
                 const permissions = await dispatch('user/getPermissions', null, { root: true })
                 accessedRoutes = filterAsyncRoutes(data.asyncRoutes, permissions)
             } else {

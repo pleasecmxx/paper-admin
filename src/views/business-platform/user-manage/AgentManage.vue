@@ -23,7 +23,7 @@
       <div class="l-table-content">
         <el-table :data="list" border style="width: 100%;">
           <el-table-column
-            prop="date"
+            prop="account_number"
             label="代理编号"
             width="180"
             align="center"
@@ -35,15 +35,8 @@
             width="100"
             align="center"
           >
-            <template slot-scope="scope">
-              <img
-                class="user-table-header-img"
-                :key="scope"
-                src="https://picsum.photos/228/228?random=3aD6bceb-a5c9-c987-A7da-E031DFFCe1f7"
-              />
-            </template>
           </el-table-column>
-          <el-table-column prop="address" label="代理手机号" align="center">
+          <el-table-column prop="phone_number" label="代理手机号" align="center">
           </el-table-column>
           <el-table-column prop="name" label="代理身份证号" align="center">
           </el-table-column>
@@ -70,7 +63,7 @@
       :visible.sync="dialogShow"
       :width="isPc ? '45%' : '96%'"
     >
-      <add-agent-dialog :closeDialog="closeDialog"/>
+      <add-agent-dialog :closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -78,6 +71,8 @@
 <script>
 import { isPC } from "./../../../util/index";
 import AddAgentDialog from "./dialog/AddAgentDialog";
+import api from "./../../../api";
+import { platform_user_manage_agent_list } from "./../../../api/admin-api";
 
 export default {
   name: "UserManage",
@@ -88,36 +83,36 @@ export default {
     return {
       isPc: isPC(),
       dialogShow: false,
-      list: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      page: 1,
+      list: [],
       userName: "",
       userTel: "",
     };
   },
+  created() {
+    // console.log("1111");
+    let params = {
+        page: this.page
+    }
+    api.get(platform_user_manage_agent_list, {
+      params: params,
+    })
+    .then(res => {
+        console.log(res);
+        if(res.code === 200){
+            this.list = res.data.list;
+        }else {
+            this.$message.error(res.msg)
+        }
+    })
+    .catch(err => {
+         console.log(err)
+    })
+  },
   methods: {
-      closeDialog() {
-          this.dialogShow = false
-      }
+    closeDialog() {
+      this.dialogShow = false;
+    },
   },
 };
 </script>

@@ -8,7 +8,7 @@ export default {
     name: '代理-店铺管理',
     meta: {
         title: '代理店铺管理',
-        icon: 'el-icon-wallet'
+        icon: 'el-icon-wallet',
     },
     children: [
         {
@@ -16,7 +16,8 @@ export default {
             name: '代理-店铺管理-主页',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-agent/shop-manage/ShopManage'),
             meta: {
-                title: '店铺管理'
+                title: '店铺管理',
+                auth: ['agent.browse']
             }
         },
     ]

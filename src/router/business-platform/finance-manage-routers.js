@@ -8,7 +8,8 @@ export default {
     name: '财务管理',
     meta: {
         title: '财务管理',
-        icon: 'el-icon-wallet'
+        icon: 'el-icon-wallet',
+        auth: ['platform.browse','admin']
     },
     children: [
         {
@@ -17,7 +18,7 @@ export default {
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/finance-manage/TakeCashManage'),
             meta: {
                 title: '提现审核',
-                auth: ['platfrom.browse']
+                auth: ['platform.browse','admin']
             }
         },
     ]

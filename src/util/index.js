@@ -89,3 +89,15 @@ export function isPC() {
         return false;
     }
 };
+
+
+export const isEmpty = (value) => {
+    try {
+      if (value === null || value === undefined || value === "" || JSON.stringify(value) === '{}') {
+        return true
+      };
+      return false;
+    } catch (e) {
+      return true;
+    }
+  };

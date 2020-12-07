@@ -34,9 +34,10 @@ api.interceptors.request.use(
                     request.data = {}
                 }
                 if (store.getters['user/isLogin']) {
+                    console.log("已登陆，加上token ",store.state.user.token)
                     request.data.token = store.state.user.token
                 }
-                // request.data = qs.stringify(request.data)
+                request.data = qs.stringify(request.data)
             }
         } else {
             // 带上 token
@@ -44,6 +45,7 @@ api.interceptors.request.use(
                 request.params = {}
             }
             if (store.getters['user/isLogin']) {
+                console.log("已登陆，加上token ",store.state.user.token)
                 request.params.token = store.state.user.token
             }
         }
@@ -53,14 +55,14 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
     response => {
-        if (response.data.error != '') {
-            // 如果接口请求时发现 token 失效，则立马跳转到登录页
-            if (response.data.status == 0) {
-                toLogin()
-            }
-            Message.error(response.data.error)
-            return Promise.reject(response.data)
-        }
+        // if (response.data.error != '') {
+        //     // 如果接口请求时发现 token 失效，则立马跳转到登录页
+        //     // if (response.data.status == 0) {
+        //     //     toLogin()
+        //     // }
+        //     Message.error('response.data.error')
+        //     return Promise.reject(response.data)
+        // }
         return Promise.resolve(response.data)
     },
     error => {

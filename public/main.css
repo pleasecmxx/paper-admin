@@ -271,6 +271,9 @@
     z-index: 5000 !important;
 }
 
+.swiper-container.banner.swiper-container-initialized.swiper-container-horizontal {
+    height: 500px !important;
+}
 /*
 .tox.tox-dialog-wrap{
     z-index: 9999!important;

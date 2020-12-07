@@ -8,7 +8,8 @@ export default {
     name: '订单管理',
     meta: {
         title: '订单管理',
-        icon: 'el-icon-tickets'
+        icon: 'el-icon-tickets',
+        auth: ['platform.browse','admin']
     },
     children: [
         {
@@ -16,7 +17,8 @@ export default {
             name: '查重订单管理',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/order-manage/PaperOrderManage'),
             meta: {
-                title: '查重订单管理'
+                title: '查重订单管理',
+                auth: ['platform.browse','admin']
             }
         },
         {
@@ -24,7 +26,8 @@ export default {
             name: '打印订单管理',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/order-manage/PrintOrderManage'),
             meta: {
-                title: '打印订单管理'
+                title: '打印订单管理',
+                auth: ['platform.browse','admin']
             }
         },
     ]

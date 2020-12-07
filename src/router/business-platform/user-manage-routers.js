@@ -16,7 +16,8 @@ export default {
             name: '用户管理',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/user-manage/UserManage'),
             meta: {
-                title: '用户管理'
+                title: '用户管理',
+                auth: ['platform.browse','admin']
             }
         },
         {
@@ -24,7 +25,8 @@ export default {
             name: '店铺管理',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/user-manage/ShopManage'),
             meta: {
-                title: '店铺管理'
+                title: '店铺管理',
+                auth: ['platform.browse','admin']
             }
         },
         {
@@ -32,7 +34,8 @@ export default {
             name: '代理管理',
             component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/user-manage/AgentManage'),
             meta: {
-                title: '代理管理'
+                title: '代理管理',
+                auth: ['platform.browse','admin']
             }
         }
     ]
