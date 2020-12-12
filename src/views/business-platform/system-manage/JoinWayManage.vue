@@ -13,54 +13,115 @@
         >
       </div>
       <div class="l-table-content">
-        <el-table :data="list" border style="width: 100%;">
+        <el-table :data="list" border style="width: 100%;" v-loading="loading">
           <el-table-column
-            prop="date"
+            prop="name"
             label="加盟系统名称"
             width="180"
             align="center"
           >
           </el-table-column>
-          <el-table-column prop="address" label="分类" align="center">
+          <el-table-column
+            prop="franchise_channel_class"
+            label="渠道类别"
+            align="center"
+            width="96"
+          >
+            <template slot-scope="scope">
+              <el-tag
+                type="success"
+                v-if="scope.row.franchise_channel_class == 1"
+                >权威系统</el-tag
+              >
+              <el-tag v-else>官方系统</el-tag>
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="单位" align="center">
+          <el-table-column prop="name" label="计费单位" align="center">
+            <template slot-scope="scope">
+              <p v-if="scope.row.billing_method === 'char'">/千字</p>
+              <p v-else-if="scope.row.billing_method === 'page'">/页</p>
+              <p v-else-if="scope.row.billing_method === 'article'">/篇</p>
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="标签" align="center">
+          <el-table-column prop="tag" label="标签" align="center" width="120">
           </el-table-column>
           <el-table-column prop="name" label="logo" width="100" align="center">
             <template slot-scope="scope">
-              <img
-                class="user-table-header-img"
-                :key="scope"
-                src="https://picsum.photos/228/228?random=3aD6bceb-a5c9-c987-A7da-E031DFFCe1f7"
-              />
+              <img class="user-table-header-img" :src="scope.row.logo" />
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="价格" align="center">
+          <el-table-column prop="price" label="价格" align="center" width="96">
           </el-table-column>
-          <el-table-column prop="name" label="初始化销量" align="center">
+          <el-table-column
+            prop="init_sales"
+            label="初始化销量"
+            align="center"
+            width="120"
+          >
           </el-table-column>
-          <el-table-column prop="name" label="描述" align="center">
+          <el-table-column label="描述" align="center" width="240">
+            <template slot-scope="scope">
+              <div class="table-max-text-area">
+                <p>{{ scope.row.desc }}</p>
+              </div>
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="代理佣金" align="center">
+          <el-table-column label="代理佣金" align="center" width="96">
+            <template slot-scope="scope">
+              <p>{{ scope.row.agency_commission }}%</p>
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="店铺佣金" align="center">
+          <el-table-column label="店铺佣金" align="center" width="96">
+            <template slot-scope="scope">
+              <p>{{ scope.row.shop_commission }}%</p>
+            </template>
           </el-table-column>
-          <el-table-column prop="name" label="操作" align="center">
+          <el-table-column prop="name" label="操作" align="center" width="180">
+            <template slot-scope="scope">
+              <el-button
+                @click.native.prevent="showDetailsDialog(scope.$index)"
+                type="text"
+                size="small"
+              >
+                查看详情
+              </el-button>
+              <el-button
+                @click.native.prevent="showDetailsDialog(scope.$index)"
+                type="text"
+                size="small"
+              >
+                编辑
+              </el-button>
+              <el-button
+                @click.native.prevent="deleteChannel(scope.row)"
+                type="text"
+                size="small"
+              >
+                删除
+              </el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
       <div class="l-page-jumper l-flex-row-start">
-        <el-pagination background layout="prev, pager, next" :total="1000">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="total"
+          :hide-on-single-page="false"
+          :current-page="page"
+          @current-change="currentPageChange"
+        >
         </el-pagination>
       </div>
     </div>
     <el-dialog
       title="配置加盟渠道"
       :visible.sync="dialogShow"
-      :width="isPc ? '45%' : '96%'"
+      :width="isPc ? '65%' : '96%'"
+      :top="'5vh'"
     >
-      <add-join-way-dialog :closeDialog="closeDialog" />
+      <add-join-way-dialog :closeDialog="closeDialog" @finish="onAddFinish" />
     </el-dialog>
   </div>
 </template>
@@ -68,6 +129,8 @@
 <script>
 import { isPC } from "./../../../util/index";
 import AddJoinWayDialog from "./dialog/AddJoinWayDialog";
+import api from "./../../../api";
+import { channelList, deletChanelApi } from "./../../../api/admin-api";
 
 export default {
   name: "JoinWayManage",
@@ -79,33 +142,99 @@ export default {
       isPc: isPC(),
       userName: "",
       dialogShow: false,
-      list: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      total: 0,
+      list: [],
+      page: 1,
+      loading: true,
     };
   },
+  created() {
+    this.getListByPage(1);
+  },
   methods: {
+    currentPageChange(page) {
+      console.log(page);
+      this.page = page;
+      this.getListByPage(page);
+    },
+
+    onAddFinish() {
+      let _this = this;
+      _this.getListByPage(1);
+    },
+
+    getListByPage(current_page) {
+      this.loading = true;
+      let params = {
+        page: 1,
+      };
+      api
+        .get(channelList, {
+          params: params,
+        })
+        .then((res) => {
+          console.log(res);
+          this.loading = false;
+          if (res.code === 200) {
+            this.total = res.data.count;
+            this.list = res.data.list;
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
+    },
+
     closeDialog() {
       this.dialogShow = false;
+    },
+
+    showDetailsDialog() {},
+
+    deleteChannel(row) {
+      let _this = this;
+      this.$confirm("此操作将永久删除此项, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let params = {
+            id: row.id,
+          };
+          console.log("删除渠道参数", params);
+          api
+            .post(deletChanelApi, params)
+            .then((res) => {
+              if (res.code === 200) {
+                _this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+                _this.getListByPage(1);
+              } else {
+                _this.$message({
+                  type: "error",
+                  message: res.msg,
+                });
+              }
+            })
+            .catch((e) => {
+              this.$message({
+                type: "error",
+                message: e,
+              });
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
   },
 };
@@ -115,5 +244,17 @@ export default {
 .business-content-container {
     width: 100%;
     min-height: 100%;
+}
+.table-max-text-area {
+    width: 100%;
+
+    /* background-color: red; */
+    margin: 0;
+    max-height: 120px;
+    overflow-y: auto;
+    text-align: left;
+}
+.table-max-text-area > p {
+    text-indent: 24px;
 }
 </style>

@@ -122,13 +122,16 @@
 
 
 import api from '@/api'
+import { isEmpty } from '../../util';
 import { loginApi, userInfoApi } from './../../api/admin-api';
 
 const state = {
     account: localStorage.account,
     token: localStorage.token,
     failure_time: localStorage.failure_time,
-    permissions: []
+    permissions: [],
+    systemLogo: '',
+    systemTitle: '',
 }
 
 const getters = {
@@ -154,7 +157,7 @@ const actions = {
                     account: data.account,
                     password: data.password,
                     token: res.data.token,
-                    failure_time:  Date.parse(new Date()) / 1000 + 24 * 60 * 60
+                    failure_time:  Date.parse(new Date()) / 1000 + 24 * 60 * 60,
                 }
                 commit('setUserData', params);
                 resolve();
@@ -176,12 +179,29 @@ const actions = {
                 }
             }).then(res => {
                 console.log('个人信息', res);
-                let permissions = res.data.list[0].permission;
+                let permissions = res.data.permission;
                 commit('setPermissions', permissions);
+                /**
+                 * systemLogo: res.data.logo.url,
+                    systemTitle: res.data.name,
+                 */
+                let params = {
+                    account: state.account,
+                    password: state.password,
+                    token: state.token,
+                    failure_time:  Date.parse(new Date()) / 1000 + 24 * 60 * 60,
+                    systemLogo: res.data && res.data.logo && res.data.logo.url  && !isEmpty(res.data.logo.url) ? res.data.logo.url : 'http://',
+                    systemTitle: res.data.name,
+                }
+                commit('setUserData', params);
                 resolve(permissions);
             })
         })
-    }
+    },
+    handleSetUserData({ state, commit },data) {
+        console.log("---手动设置用户信息",data)
+        commit('setUserData', data);
+    },
 }
 
 const mutations = {
@@ -193,6 +213,8 @@ const mutations = {
             state.account = data.account;
             state.token = data.token;
             state.failure_time = data.failure_time;
+            state.systemLogo = data.systemLogo;
+            state.systemTitle = data.systemTitle;
     },
     removeUserData(state) {
         localStorage.removeItem('account')

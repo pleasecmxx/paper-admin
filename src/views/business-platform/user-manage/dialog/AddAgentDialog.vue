@@ -5,7 +5,7 @@
         <p class="min-width-text5">代理名称</p>
         <el-input
           class="l-dialog-input"
-          v-model="userName"
+          v-model="agentName"
           placeholder="请输入代理名称"
         />
       </div>
@@ -13,7 +13,7 @@
         <p>身份证</p>
         <el-input
           class="l-dialog-input"
-          v-model="userName"
+          v-model="agentIdCardNumber"
           placeholder="请输入代理身份证"
         />
       </div>
@@ -23,7 +23,7 @@
         <p class="min-width-text5">代理手机号</p>
         <el-input
           class="l-dialog-input"
-          v-model="userName"
+          v-model="agentPhoneNumber"
           placeholder="请输入代理手机号"
         />
       </div>
@@ -34,56 +34,184 @@
         type="textarea"
         :rows="2"
         class="l-dialog-input"
-        v-model="userName"
+        v-model="agentDec"
         placeholder="请输入代理描述/备注"
       />
     </div>
     <div class="l-dialog-row l-flex-row-start height-auto">
       <p class="min-width-text5">附件</p>
-      <image-upload class="l-dialog-imgae-uploader" :url.sync="image" action="http://scrm.1daas.com/api/upload/upload" name="image" :width="250" :height="150" :data="{'token':'TKD628431923530324'}" @onSuccess="handleSuccess1" />
+      <div class="dialog-uploader-container">
+        <el-upload
+          class="upload-demo"
+          drag
+          :action="uploaderFileUrl"
+          :on-success="onUploaderSuccess"
+          :on-error="onError"
+          :on-progress="onProgress"
+          :data="uploaderFileExtraParams"
+          :on-change="onFilePickerChange"
+          :disabled="agentAccount.length > 0 ? false : true"
+          :style="{ opacity: agentAccount.length > 0 ? 1 : 0.42 }"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">
+            只能上传jpg/png文件，且不超过500kb
+          </div>
+          <div
+            v-show="agentAccount.length > 0 ? false : true"
+            class="disable-box"
+          >
+            请先设置代理账号
+          </div>
+        </el-upload>
+      </div>
     </div>
     <div class="l-dialog-row l-flex-row-start">
       <div class="l-dialog-half-row l-flex-row-start">
         <p class="min-width-text5">账号</p>
         <el-input
           class="l-dialog-input"
-          v-model="userName"
+          v-model="agentAccount"
           placeholder="请输入代理账号"
+          :disabled="hasUploaderImage"
         />
       </div>
       <div class="l-dialog-half-row l-flex-row-start">
         <p>密码</p>
         <el-input
           class="l-dialog-input"
-          v-model="userName"
+          v-model="agentPassword"
           placeholder="请设定代理初始密码"
         />
       </div>
     </div>
     <div class="l-dialog-option-footer">
       <el-button @click="cancelDialog">取 消</el-button>
-      <el-button @click="confirmAdd" type="primary">确 认</el-button>
+      <el-button
+        @click="confirmAdd"
+        :loading="handleAddAgentLoading"
+        type="primary"
+        >确 认</el-button
+      >
     </div>
   </div>
 </template>
 
 <script>
+import { isEmpty } from "../../../../util";
+import {
+  common_uploader,
+  platform_user_manage_create_agent,
+} from "./../../../../api/admin-api";
+import store from "@/store/index";
+import api from "../../../../api";
+
 export default {
   name: "AddAgentDialog",
   props: {
-      closeDialog: {
-          type: Function,
-          default: null
-      }
+    closeDialog: {
+      type: Function,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      uploaderFileUrl: process.env.VUE_APP_API_ROOT + common_uploader,
+      image: "",
+      agentName: "",
+      agentIdCardNumber: "",
+      agentPhoneNumber: "",
+      agentDec: "",
+      agentAccount: "",
+      agentPassword: "",
+      handleAddAgentLoading: false,
+      hasUploaderImage: false,
+      uploaderFileExtraParams: {
+        account_number: this.agentAccount,
+        type: "0",
+        token: store.state.user.token,
+      },
+    };
+  },
+  watch: {
+    agentAccount: function (val, oVal) {
+      console.log(val, oVal);
+      this.uploaderFileExtraParams.account_number = val
+    },
+  },
+  created() {
+    console.log("uploaderFileUrl", this.uploaderFileUrl);
   },
   methods: {
-      cancelDialog() {
-          this.closeDialog();
-      },
-      confirmAdd() {
-          this.closeDialog();
+    cancelDialog() {
+      this.closeDialog();
+    },
+    confirmAdd() {
+      if (isEmpty(this.agentName)) {
+        return this.$message.error("请输入代理名称");
       }
-  }
+      if (isEmpty(this.agentIdCardNumber)) {
+        return this.$message.error("请输入代理身份证号码");
+      }
+      if (isEmpty(this.agentPhoneNumber)) {
+        return this.$message.error("请输入代理手机号");
+      }
+      if (isEmpty(this.agentDec)) {
+        return this.$message.error("请输入描述/备注");
+      }
+      if (isEmpty(this.agentAccount)) {
+        return this.$message.error("请输入代理账号");
+      }
+      if (isEmpty(this.agentPassword)) {
+        return this.$message.error("请输入代理账号密码");
+      }
+      let params = {
+        account_number: this.agentAccount,
+        password: this.agentPassword,
+        id_card: this.agentIdCardNumber,
+        phone_number: this.agentPhoneNumber,
+        name: this.agentName,
+        desc: this.agentDec,
+      };
+      this.handleAddAgentLoading = true;
+      api
+        .post(platform_user_manage_create_agent, params)
+        .then((res) => {
+          this.handleAddAgentLoading = false;
+          console.log(res);
+          if (res.code === 200) {
+            this.closeDialog();
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+        .catch((err) => {
+          this.handleAddAgentLoading = false;
+          console.log(err);
+        });
+    },
+
+    onUploaderSuccess(e) {
+      console.log(e);
+      this.hasUploaderImage = true;
+    },
+
+    onError(e) {
+      console.log("文件上传失败");
+      this.$message.error("文件上传失败");
+    },
+
+    onProgress(e) {
+      console.log("文件上传进度", e);
+    },
+
+    onFilePickerChange(e) {
+      if (isEmpty(this.agentAccount)) {
+        return this.$message.error("请先设置代理账号");
+      }
+    },
+  },
 };
 </script>
 

@@ -29,6 +29,7 @@
         "spinkit": "^2.0.1",
         "swiper": "6.3.5",
         "tinymce": "^5.5.1",
+        "v-viewer": "^1.5.1",
         "vue": "^2.6.12",
         "vue-awesome-swiper": "^4.1.1",
         "vue-clipboard2": "^0.3.1",

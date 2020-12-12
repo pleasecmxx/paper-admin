@@ -37,7 +37,7 @@ api.interceptors.request.use(
                     console.log("已登陆，加上token ",store.state.user.token)
                     request.data.token = store.state.user.token
                 }
-                request.data = qs.stringify(request.data)
+                // request.data = qs.stringify(request.data)
             }
         } else {
             // 带上 token

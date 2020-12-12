@@ -2,19 +2,22 @@
   <div class="l-dialog-content">
     <div class="l-dialog-row l-flex-row-start">
       <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text5">文章标题</p>
+        <p class="min-width-text5">轮播图排序</p>
         <el-input
           class="l-dialog-input"
-          v-model="title"
-          placeholder="请输入文章标题"
+          v-model="sort"
+          placeholder="请输入排序（越大越靠前）"
           clearable
         />
       </div>
       <div class="l-dialog-half-row l-flex-row-start">
-        <p>所属分类</p>
-        <el-select v-model="solutionType" placeholder="请选择渠道类型">
+        <p>权限</p>
+        <el-select
+          v-model="status"
+          placeholder="请选择展示权限"
+        >
           <el-option
-            v-for="item in solutionTypes"
+            v-for="item in status_types"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -25,7 +28,15 @@
     </div>
     <div class="l-dialog-row l-flex-row-start height-auto">
       <div class="l-dialog-half-row l-flex-row-start height-auto">
-        <p class="min-width-text5">文章封面</p>
+        <p class="min-width-text5">链接地址</p>
+        <el-input
+          class="l-dialog-input"
+          v-model="linkUrl"
+          placeholder="请输入跳转链接地址（默认不跳转）"
+        />
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start height-auto">
+        <p>logo</p>
         <el-upload
           class="upload-demo"
           drag
@@ -43,17 +54,18 @@
             v-if="!imageUrl.length"
           ></i>
           <div class="el-upload__text" v-if="!imageUrl.length">
-            将图片拖到此处，或<em>点击上传</em>
+            将轮播图拖到此处，或<em>点击上传</em>
           </div>
           <img :src="imageUrl" class="after-uploader-img" v-else />
         </el-upload>
       </div>
     </div>
-    <div class="edit-content">
-      <editor
-        :setting="{ min_height: 500, max_height: 500 }"
-        v-model="content"
-      />
+    <div class="l-dialog-row l-flex-row-start">
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">启用状态</p>
+        <el-switch v-model="value" active-color="#13ce66" inactive-color="#999">
+        </el-switch>
+      </div>
     </div>
     <div class="l-dialog-option-footer">
       <el-button @click="cancelDialog">取 消</el-button>
@@ -66,12 +78,12 @@
 
 <script>
 import { isEmpty } from "../../../../util";
-import { comon_image_uploader, addSolution } from "./../../../../api/admin-api";
+import { comon_image_uploader, addChannel, platform_banner_uploader } from "./../../../../api/admin-api";
 import store from "@/store/index";
 import api from "../../../../api";
 
 export default {
-  name: "AddJoinWayDialog",
+  name: "AddBannerDialog",
   props: {
     closeDialog: {
       type: Function,
@@ -81,74 +93,43 @@ export default {
   data() {
     return {
       imageUrl: "",
+      value: true,
+      disable: 1,
+      uploaderFileUrl: process.env.VUE_APP_API_ROOT + comon_image_uploader,
       uploaderFileExtraParams: {
         token: store.state.user.token,
       },
-      uploaderFileUrl: process.env.VUE_APP_API_ROOT + comon_image_uploader,
       title: "",
       content: "",
-      solutionType: "",
-      solutionTypes: [
+      linkUrl: "",
+      sort: 1,
+      status: "1",
+      status_types: [
         {
           value: "1",
-          label: "论文查重技巧",
+          label: "仅PC",
         },
         {
           value: "2",
-          label: "论文常见问题",
+          label: "仅H5",
         },
         {
           value: "3",
-          label: "论文行业资讯",
-        },
-        {
-          value: "4",
-          label: "论文知识普及",
+          label: "PC和H5",
         },
       ],
       addLoading: false,
     };
   },
+  watch: {
+      value: function(value,oldValue){
+          console.log('value改变了',value, oldValue);
+          this.disable = value ? 1 : 0;
+      }
+  },
   methods: {
     cancelDialog() {
       this.closeDialog();
-    },
-    confirmAdd() {
-      if (isEmpty(this.title)) {
-        return this.$message.error("请输入标题");
-      }
-      if (isEmpty(this.solutionType)) {
-        return this.$message.error("请选择文章类型");
-      }
-      if (isEmpty(this.imageUrl)) {
-        return this.$message.error("请选择文章封面");
-      }
-      if (isEmpty(this.content)) {
-        return this.$message.error("请输入内容");
-      }
-      this.addLoading = true;
-      console.log(this.content);
-      let params = {
-        title: this.title,
-        desc: this.content,
-        type: this.solutionType,
-        cover_photo: this.imageUrl,
-      };
-      api
-        .post(addSolution, params)
-        .then((res) => {
-          console.log(res);
-          if (res.code == 200) {
-            this.$emit("finish");
-            this.addLoading = false;
-            this.cancelDialog();
-          }
-        })
-        .catch((err) => {
-          this.addLoading = false;
-          console.log(err);
-        });
-      //
     },
     onUploaderSuccess(e) {
       if (e.code === 200) {
@@ -167,6 +148,37 @@ export default {
     onProgress(e) {},
 
     onFilePickerChange(e) {},
+
+    confirmAdd() {
+      if (isEmpty(this.sort)) {
+        return this.$message.error("请输入排序");
+      }
+      this.addLoading = true;
+      console.log(this.content);
+      let params = {
+        sort: this.sort, //9809
+        status: this.status, //1\2\3
+        url: this.imageUrl, //url
+        link_url: this.linkUrl, //
+        disable: this.disable, //禁用 1 启用
+      };
+      console.log("参数",params)
+      api
+        .post(platform_banner_uploader, params)
+        .then((res) => {
+          console.log(res);
+          if (res.code == 200) {
+            this.$emit("finish");
+            this.addLoading = false;
+            this.cancelDialog();
+          }
+        })
+        .catch((err) => {
+          this.addLoading = false;
+          console.log(err);
+        });
+      //
+    },
   },
 };
 </script>

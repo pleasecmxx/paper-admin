@@ -29,13 +29,18 @@ Vue.prototype.$ELEMENT = ElementUI
 Vue.use(ElementUI, {
     size: store.state.settings.elementSize,
     i18n: (key, value) => i18n.t(key, value)
-})
+});
 
-import hotkeys from 'hotkeys-js'
-Vue.prototype.$hotkeys = hotkeys
+import hotkeys from 'hotkeys-js';
+Vue.prototype.$hotkeys = hotkeys;
 
 import Contextmenu from 'vue-contextmenujs'
 Vue.use(Contextmenu)
+import Viewer from 'v-viewer';
+Vue.use(Viewer);
+Viewer.setDefaults({
+  zIndexInline: 9999
+});
 
 // 全局组件自动注册
 import './components/autoRegister'

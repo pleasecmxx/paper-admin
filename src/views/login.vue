@@ -209,8 +209,7 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store
-            .dispatch("user/login", this.form)
+          this.$store.dispatch("user/login", this.form)
             .then(() => {
               this.loading = false;
               this.form.remember &&

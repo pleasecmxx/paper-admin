@@ -93,11 +93,16 @@ export function isPC() {
 
 export const isEmpty = (value) => {
     try {
-      if (value === null || value === undefined || value === "" || JSON.stringify(value) === '{}') {
-        return true
-      };
-      return false;
+        if (value === null || value === undefined || value === "" || JSON.stringify(value) === '{}') {
+            return true
+        };
+        return false;
     } catch (e) {
-      return true;
+        return true;
     }
-  };
+};
+
+
+export const deepCopy = value => {
+    return JSON.parse(JSON.stringify(value));
+}
