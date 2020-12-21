@@ -1,0 +1,366 @@
+.business-content-container {
+    position: absolute;
+    top: 90px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    overflow-y: auto;
+    overflow-x: auto;
+    /* margin: 12px 12px 0 12px; */
+    /* background-color: #ffffff; */
+}
+
+.business-content-inner {
+    width: calc(100% - 24px);
+    height: calc(100% - 90px - 24px);
+    background-color: #ffffff;
+    margin: 12px;
+}
+
+.l-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: -moz-flex;
+    display: flex;
+}
+
+.l-flex-row-start {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: -moz-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.l-flex-row-center {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: -moz-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.l-search-input {
+    width: 240px !important;
+    margin-right: 12px;
+}
+
+.search-row {
+    width: 100%;
+    height: 72px;
+    /* background-color: #999; */
+    padding: 0 12px;
+}
+
+
+.l-table-content {
+    position: relative;
+    width: calc(100% - 24px);
+    height: calc(100% - 72px - 46px);
+    min-height: 400px;
+    overflow-y: auto;
+    margin: 0 12px;
+}
+
+.l-page-jumper {
+    width: 100%;
+    height: 46px;
+    /* background-color: red; */
+}
+
+.user-table-header-img {
+    width: 42px;
+    height: 42px;
+    border-radius: 4px;
+}
+
+.height-auto {
+    height: auto !important;
+    /* max-height: 100px; */
+    align-items: flex-start;
+}
+
+.el-dialog__body {
+    padding-top: 0 !important;
+    padding-bottom: 12px !important;
+}
+
+.el-tabs__header.is-top {
+    margin-bottom: 6px !important;
+}
+
+.el-tabs.el-tabs--card.el-tabs--top {
+    width: 100%;
+    height: 100% !important;
+}
+
+.el-tabs__content {
+    width: 100%;
+    height: 100% !important;
+}
+
+.el-tab-pane {
+    width: 100%;
+    height: 100% !important;
+}
+
+.el-tabs__item.is-top>.l-tab-item>.el-badge.item>.el-badge__content.el-badge__content--undefined.is-fixed {
+    position: absolute;
+    top: 8px !important;
+    right: 6px !important;
+    z-index: 99999;
+}
+
+.user-table-id-card-img {
+    width: 80px;
+    height: 60px;
+    border-radius: 4px;
+    cursor: zoom-in;
+}
+
+
+.l-dialog-content {
+    width: 100%;
+    height: 100%;
+}
+
+.l-dialog-row {
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.l-dialog-half-row {
+    position: relative;
+    width: 50%;
+    height: 60px;
+
+    /* background-color: #999; */
+    padding-right: 12px;
+}
+
+.l-dialog-row>p,
+.l-dialog-half-row>p {
+    color: #5e6d82;
+    margin-right: 8px;
+}
+
+.l-dialog-half-row>.dec-text {
+    position: absolute;
+    bottom: -20px;
+    left: 120px;
+    font-size: 12px;
+    color: #ff0000 !important;
+}
+
+.l-dialog-input {
+    width: auto;
+    min-width: calc(100% - 100px);
+    max-height: 100px;
+    overflow-x: auto;
+}
+
+.l-dialog-option-footer {
+    width: 100%;
+
+    /* height: 72px; */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: -moz-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.l-dialog-imgae-uploader {
+    width: 80%;
+    min-width: calc(100% - 100px);
+
+    /* background-color: red; */
+}
+
+.min-width-text5 {
+    min-width: 72px;
+
+    /* background-color: red; */
+}
+
+.min-width-text10 {
+    min-width: 112px;
+}
+
+.l-flex-row-end {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: -moz-box;
+    display: -moz-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.l-tab-item-title {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 20px !important;
+    height: 20px !important;
+    text-align: center;
+    padding-top: 4px;
+}
+
+.l-tab-item-price {
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 20px !important;
+    height: 20px !important;
+    text-align: center;
+    font-size: 12px;
+    color: #5e6d82;
+}
+
+.notice-text {
+    width: 100%;
+    font-size: 14px;
+    color: #ff0000;
+    margin: 0;
+    height: 24px;
+    padding: 0 12px;
+    line-height: 24px;
+}
+
+.l-tab-table-container {
+    width: 100%;
+    height: calc(100% - 46px) !important;
+    overflow: hidden;
+    transition: all ease 0.25s;
+}
+
+.l-tab-table-container.with-notice {
+    width: 100%;
+    height: calc(100% - 70px) !important;
+    overflow: hidden;
+}
+
+
+.user-table-banner-img {
+    width: 160px;
+    height: 60px;
+    cursor: zoom-in;
+}
+
+.tox-tinymce-aux {
+    z-index: 5000 !important;
+}
+
+.swiper-container.banner.swiper-container-initialized.swiper-container-horizontal {
+    height: 500px !important;
+}
+
+/*
+.tox.tox-dialog-wrap{
+    z-index: 9999!important;
+}
+
+.tox-dialog-wrap{
+    z-index: 9999!important;
+}
+.tox-dialog {
+    z-index: 9999!important;
+} */
+
+.dialog-uploader-container {
+    position: relative;
+}
+
+.disable-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    color: #333333;
+    font-size: 12px;
+}
+
+.el-image-viewer__btn.el-image-viewer__close>.el-icon-circle-close {
+    color: #ffffff
+}
+
+
+.el-upload.el-upload--text,
+.el-upload-dragger {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+input::-webkit-textfield-decoration-container {
+    background-color: transparent;
+}
+
+/* //添加背景色 下边两行是去掉input 输入框右边的上下箭头按钮 */
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+
+.upload-demo,
+.el-upload.el-upload--text,
+.el-upload-dragger
+ {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 190px;
+    height: 120px;
+}
+.el-upload-dragger.el-icon-upload,
+.el-upload-dragger>.el-icon-upload{
+    margin: 0!important;
+    line-height: 40px;
+}
+
+.after-uploader-img {
+    width: 100%;
+    height: 100%;
+}
+
+.user-table-logo-img {
+    width: 120px;
+    height: 72px;
+    border-radius: 6px;
+}

@@ -39,3 +39,19 @@ export const addSolution = '/api/management/platform/questions_answers_create'; 
 export const solutionList = '/api/management/platform/questions_answers_list';    //问答列表
 export const editSolution = '/api/management/platform/questions_answers_edit';    //编辑问答
 export const deleteSolution = 'api/management/platform/questions_answers_delete'; //删除问答
+
+export const paperOrderListApi = 'api/management/platform/check_duplicate_order_list'; //平台端订单列表查询
+
+
+
+/****************** 店铺端 *********************/
+
+export const shopBannerList = '/api/management/shop/banner_list';   //店铺列表
+export const shopBannerAddApi = 'api/management/shop/upload_banner';  //店铺banner添加接口
+export const shopConfigApi = 'api/management/shop/config_edit';     //店铺配置
+export const shopConfigQuery = 'api/management/shop/config_search'; //店铺配置查询
+export const shopPricePriceCreateApi = 'api/management/shop/print_price_config';    //店铺打印定价创建
+export const shopPrintPriceEditApi = 'api/management/shop/print_price_config_edit';  //店铺打印定价编辑
+export const shopPricePriceQueryApi = 'api/management/shop/print_price_config_search';  //店铺打印定价查询
+export const shopBannerDeleteApi = '/api/management/shop/banner_delete';  //店铺banner删除
+export const shopChannelList = '/api/checkparper/channel_config_list';  //C端渠道列表

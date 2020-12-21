@@ -5,35 +5,35 @@
                 <div class="item">
                     <i class="ri-mail-fill" />
                     <div class="info">
-                        <div class="title">你收到了 8 份日报</div>
+                        <div class="title">有8笔提现申请</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>
                 <div class="item">
                     <i class="ri-service-fill" />
                     <div class="info">
-                        <div class="title">你收到了 3 位同事的好友申请，请及时处理</div>
+                        <div class="title">有11条查重失败订单</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>
                 <div class="item">
                     <i class="ri-file-edit-fill" />
                     <div class="info">
-                        <div class="title">你有 3 份合同待审批</div>
+                        <div class="title">有1位代理加入</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>
                 <div class="item">
                     <i class="ri-mail-fill" />
                     <div class="info">
-                        <div class="title">你收到了 8 份日报</div>
+                        <div class="title">你收到了1份系统日报</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>
                 <div class="item">
                     <i class="ri-service-fill" />
                     <div class="info">
-                        <div class="title">你收到了 3 位同事的好友申请，请及时处理</div>
+                        <div class="title">你收到了1份系统异常汇报</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>
@@ -50,14 +50,14 @@
                 <div class="item">
                     <i class="ri-bug-fill" />
                     <div class="info">
-                        <div class="title">你有 2 个来自项目「Fantastic-admin」的 bug 待处理</div>
+                        <div class="title">你有 2 个来自**代理的提现申请待审核</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>
                 <div class="item">
                     <i class="ri-git-merge-fill" />
                     <div class="info">
-                        <div class="title">你有 3 个来自项目「Fantastic-admin」的代码合并申请，提交人：Hooray，提交备注：专业版更新</div>
+                        <div class="title">你有 99 条来自查重失败订单，需要注意查看</div>
                         <div class="date">2020-10-10 10:00:00</div>
                     </div>
                 </div>

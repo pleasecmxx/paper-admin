@@ -33,7 +33,8 @@
                 v-if="scope.row.franchise_channel_class == 1"
                 >权威系统</el-tag
               >
-              <el-tag v-else>官方系统</el-tag>
+              <!-- <el-tag v-else>官方系统</el-tag> -->
+              <el-tag v-else>权威系统</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="计费单位" align="center">
@@ -247,10 +248,8 @@ export default {
 }
 .table-max-text-area {
     width: 100%;
-
-    /* background-color: red; */
     margin: 0;
-    max-height: 120px;
+    max-height: 300px;
     overflow-y: auto;
     text-align: left;
 }

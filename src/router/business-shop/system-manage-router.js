@@ -15,16 +15,25 @@ export default {
         {
             path: 'normal-config',
             name: '店铺-基础配置',
-            component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-shop/system-manage/NormalConfig'),
+            component: () => import(/* webpackChunkName: 'NormalConfig' */ '@/views/business-shop/system-manage/NormalConfig'),
             meta: {
                 title: '基础配置',
                 auth: ['shop.browse']
             }
         },
         {
+            path: 'channle-list-config',
+            name: '店铺-渠道配置',
+            component: () => import(/* webpackChunkName: 'channel.list.config' */ '@/views/business-shop/system-manage/channel.list.config'),
+            meta: {
+                title: '查重产品',
+                auth: ['shop.browse']
+            }
+        },
+        {
             path: 'edit-password',
             name: '店铺-修改密码',
-            component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-shop/system-manage/EditPassword'),
+            component: () => import(/* webpackChunkName: 'EditPassword' */ '@/views/business-shop/system-manage/EditPassword'),
             meta: {
                 title: '修改密码',
                 auth: ['shop.browse']

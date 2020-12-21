@@ -30,9 +30,9 @@
             <span v-if="$store.state.settings.enablePageReload" class="item" @click="reload($store.state.settings.enableTabbar ? 1 : 2)">
                 <svg-icon name="toolbar-reload" />
             </span>
-            <span v-if="$store.state.settings.enableThemeSetting" class="item" @click="$eventBus.$emit('global-theme-toggle')">
+            <!-- <span v-if="$store.state.settings.enableThemeSetting" class="item" @click="$eventBus.$emit('global-theme-toggle')">
                 <svg-icon name="toolbar-theme" />
-            </span>
+            </span> -->
         </div>
         <el-dropdown size="default" class="user-container" @command="userCommand">
             <div class="user-wrapper">
