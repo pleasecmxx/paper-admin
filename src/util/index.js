@@ -106,3 +106,51 @@ export const isEmpty = (value) => {
 export const deepCopy = value => {
     return JSON.parse(JSON.stringify(value));
 }
+
+
+export const formatUTCTime = (str) => {
+    let date = new Date(str);
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+    if (Number(month) < 10) {
+        month = '0' + month
+    };
+    if (Number(day) < 10) {
+        day = '0' + day;
+    };
+    if (Number(min) < 10) {
+        min = '0' + min;
+    };
+    if (Number(hour) < 10) {
+        hour = '0' + hour;
+    };
+    return year + '-' + month + '-' + day + ' ' + hour + ":" +  min
+ };
+
+
+ export const formatUTCTimePoint = (str) => {
+    let date = new Date(str);
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hour = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+    if (Number(month) < 10) {
+        month = '0' + month
+    };
+    if (Number(day) < 10) {
+        day = '0' + day;
+    };
+    if (Number(min) < 10) {
+        min = '0' + min;
+    };
+    if (Number(hour) < 10) {
+        hour = '0' + hour;
+    };
+    return year + '-' + month + '-' + day;
+ };

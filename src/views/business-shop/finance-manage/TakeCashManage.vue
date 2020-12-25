@@ -1,7 +1,8 @@
 <template>
   <div class="business-content-container">
     <div style="border-radius: 4px;" class="business-content-inner">
-      <el-tabs style="margin-left: -1px;" type="card">
+        <take-cash-tab-item :type="3" />
+      <!-- <el-tabs style="margin-left: -1px;" type="card">
         <el-tab-pane>
           <div slot="label">
             <i class="el-icon-files"></i>
@@ -23,7 +24,7 @@
           </div>
           <take-cash-tab-item :type="3" />
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
     </div>
   </div>
 </template>

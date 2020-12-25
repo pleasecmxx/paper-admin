@@ -1,5 +1,5 @@
 <template>
-  <div class="business-content-container">111</div>
+  <div class="business-content-container l-flex">暂无</div>
 </template>
 
 <script>
@@ -16,6 +16,10 @@ export default {
 .business-content-container {
     width: 100%;
     min-height: 100%;
-    background-color: tomato;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    /* background-color: #f2f2f2; */
 }
 </style>

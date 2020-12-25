@@ -55,3 +55,8 @@ export const shopPrintPriceEditApi = 'api/management/shop/print_price_config_edi
 export const shopPricePriceQueryApi = 'api/management/shop/print_price_config_search';  //店铺打印定价查询
 export const shopBannerDeleteApi = '/api/management/shop/banner_delete';  //店铺banner删除
 export const shopChannelList = '/api/checkparper/channel_config_list';  //C端渠道列表
+export const shopPaperOrderListApi = 'api/management/shop/shop_order_list';
+export const canTakeCashMoneyQuery = 'api/management/withdrawal_number_query';  //可提现金额查询
+export const askTackCashApi = 'api/management/withdrawal_application';  //提现申请接口
+
+export const takeCashRecordListApi = 'api/management/withdrawal_recordList_list';  //提现记录
