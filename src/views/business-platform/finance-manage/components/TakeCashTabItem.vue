@@ -14,9 +14,12 @@
         <el-table-column
           prop="date"
           label="提交日期"
-          width="120"
+          width="180"
           align="center"
         >
+        <template slot-scope="scope">
+          <p>{{formatTime(scope.row.submit_time)}}</p>
+        </template>
         </el-table-column>
         <el-table-column
           prop="date"
@@ -24,9 +27,13 @@
           width="120"
           align="center"
         >
+        <template slot-scope="scope">
+          <p v-if="scope.row.withdraw_user__identity == 1">店铺</p>
+          <p v-else-if="scope.row.withdraw_user__identity == 2">代理</p>
+        </template>
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="withdraw_account_number"
           label="提交账号"
           align="center"
           width="180"
@@ -38,12 +45,15 @@
           align="center"
           width="120"
         >
+        <template slot-scope="scope">
+          <p>￥{{scope.row.withdraw_number}}</p>
+        </template>
         </el-table-column>
-        <el-table-column prop="name" label="账号" align="center" width="120">
+        <el-table-column prop="phone_number" label="到账支付宝" align="center" width="120">
         </el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" width="96">
+        <el-table-column prop="withdraw_man_name" label="到账支付宝姓名" align="center" width="96">
         </el-table-column>
-        <el-table-column prop="name" label="提现说明" align="center">
+        <el-table-column prop="withdraw_desc" label="提现说明" align="center">
         </el-table-column>
         <el-table-column
           v-if="type === 1"
@@ -54,7 +64,7 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click.native.prevent="showCheckDialog(scope.$index)"
+              @click.native.prevent="showCheckDialog(scope.row)"
               type="text"
               size="small"
               v-if="type === 1"
@@ -73,15 +83,17 @@
       title="审核"
       :visible.sync="dialogShow"
       :width="isPc ? '50%' : '96%'"
-      v-if="type === 1"
+      v-if="type == 1"
     >
-      <check-dialog :closeDialog="closeDialog" />
+      <check-dialog ref="checkDialogRef" :closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { isPC } from "./../../../../util";
+import api from "../../../../api";
+import { takeCashPlatformListApi } from "../../../../api/admin-api";
+import { formatUTCTime, isPC } from "./../../../../util";
 import CheckDialog from "./../CheckDialog";
 export default {
   name: "PaperOrderItem",
@@ -93,63 +105,44 @@ export default {
     return {
       isPc: isPC(),
       dialogShow: false,
-      list: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      list: [],
+      page: 1,
+      total: 0,
     };
   },
+  created() {
+    this.getListByPage();
+  },
   methods: {
-    showCheckDialog() {
+    formatTime(t){
+      return formatUTCTime(t)
+    },
+    getListByPage() {
+      let params = {
+        withdraw_status: this.type,
+        page: this.page,
+      };
+      api
+        .get(takeCashPlatformListApi, {params})
+        .then((res) => {
+          console.log(res)
+          if (res.code === 200) {
+            this.list = res.data.list;
+            this.$emit('send_total_money',{money: res.data.total_money, type: this.type})
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error("操作失败，请稍后重试");
+        });
+    },
+    showCheckDialog(row) {
       this.dialogShow = true;
+      this.$nextTick(() => {
+        this.$refs['checkDialogRef'].setEditData(row)
+      })
     },
     closeDialog() {
       this.dialogShow = false;

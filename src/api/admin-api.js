@@ -42,7 +42,7 @@ export const deleteSolution = 'api/management/platform/questions_answers_delete'
 
 export const paperOrderListApi = 'api/management/platform/check_duplicate_order_list'; //平台端订单列表查询
 
-
+export const takeCashPlatformListApi = 'api/management/platform/withdrawal_list'
 
 /****************** 店铺端 *********************/
 
@@ -60,3 +60,5 @@ export const canTakeCashMoneyQuery = 'api/management/withdrawal_number_query';  
 export const askTackCashApi = 'api/management/withdrawal_application';  //提现申请接口
 
 export const takeCashRecordListApi = 'api/management/withdrawal_recordList_list';  //提现记录
+
+export const confirmPassOrNotTakeCashApi = 'api/management/platdorm/withdraw_review';

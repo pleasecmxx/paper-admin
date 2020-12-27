@@ -156,7 +156,7 @@ export default {
   },
   created() {
     let m = {
-    //   key: "7cc025a9-27ee-4160-91bf-cb89d344afcc",
+      //   key: "7cc025a9-27ee-4160-91bf-cb89d344afcc",
       text: "搬迁之前牧生活",
       title: "title",
       author: "author",
@@ -174,29 +174,29 @@ export default {
     let newKeyArr = keyArr.sort(this.compare);
     console.log(newKeyArr);
     let newKeyAndValueArr = [];
-    newKeyArr.forEach(key => {
-        newKeyAndValueArr.push(key + '=' +  m[key]);
+    newKeyArr.forEach((key) => {
+      newKeyAndValueArr.push(key + "=" + m[key]);
     });
-    console.log("newKeyAndValueArr",newKeyAndValueArr);
-    let str = '';
-    newKeyAndValueArr.forEach((ele,index) => {
-        if(index === 0){
-            str = ele;
-        }else {
-            str =  str + '&' + ele;
-        }
+    console.log("newKeyAndValueArr", newKeyAndValueArr);
+    let str = "";
+    newKeyAndValueArr.forEach((ele, index) => {
+      if (index === 0) {
+        str = ele;
+      } else {
+        str = str + "&" + ele;
+      }
     });
-    console.log(str)
+    console.log(str);
   },
 
   methods: {
     compare(a, b) {
-        console.log(a,b, a> b);
-        if(a >   b){
-            return 1
-        }else {
-            return - 1
-        }
+      console.log(a, b, a > b);
+      if (a > b) {
+        return 1;
+      } else {
+        return -1;
+      }
     },
 
     showPassword() {
@@ -209,7 +209,8 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch("user/login", this.form)
+          this.$store
+            .dispatch("user/login", this.form)
             .then(() => {
               this.loading = false;
               this.form.remember &&
