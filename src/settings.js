@@ -6,7 +6,7 @@ let globalSettings = {
      * 3、鉴权指令：v-auth、v-auth-all
      * 4、鉴权函数：this.$auth()、this.$authAll()
      */
-    openPermission: false,
+    openPermission: true,
     /**
      * 布局类型，当设置为非 adaption 时，请去 ./src/assets/styles/resources/layout.scss 里设置 $g-app-width
      * adaption 自适应
@@ -29,7 +29,7 @@ let globalSettings = {
     // 是否显示头部
     showHeader: false,
     // 是否开启侧边栏展开收起按钮
-    enableSidebarCollapse: false,
+    enableSidebarCollapse: true,
     // 侧边栏是否收起
     sidebarCollapse: false,
     // 切换侧边栏同时跳转页面
@@ -39,7 +39,7 @@ let globalSettings = {
     // 面包屑导航（包含标签栏）是否固定
     breadcrumbFixed: true,
     // 是否开启标签栏
-    enableTabbar: false,
+    enableTabbar: true,
     // 是否显示底部版权信息，同时在路由 meta 对象里可以单独设置某个路由是否显示底部版权信息
     showCopyright: true,
     // 版权信息配置，格式为：Copyright © [dates] <company>
@@ -55,13 +55,13 @@ let globalSettings = {
     // 默认语言，留空则跟随系统
     defaultLang: '',
     // 是否开启全屏
-    enableFullscreen: false,
+    enableFullscreen: true,
     // 是否开启页面刷新
-    enablePageReload: false,
+    enablePageReload: true,
     // 是否开启载入进度条
     enableProgress: true,
     // 是否开启动态标题
-    enableDynamicTitle: false,
+    enableDynamicTitle: true,
     // 是否开启控制台
     enableDashboard: true,
     // 控制台名称
@@ -72,17 +72,17 @@ let globalSettings = {
     enableThemeSetting: true
 }
 
-// 演示&开发环境开启全部功能（这部分代码可删除，仅方便作者打包演示环境）
-if (process.env.VUE_APP_TYPE == 'example' || process.env.NODE_ENV == 'development') {
-    globalSettings.openPermission = true
-    globalSettings.enableNotification = true
-    globalSettings.enableSidebarCollapse = true
-    globalSettings.enableTabbar = true
-    globalSettings.enableI18n = true
-    globalSettings.enableFullscreen = true
-    globalSettings.enablePageReload = true
-    globalSettings.enableDynamicTitle = true
-    globalSettings.enableErrorLog = true
-}
+// // 演示&开发环境开启全部功能（这部分代码可删除，仅方便作者打包演示环境）
+// if (process.env.VUE_APP_TYPE == 'example' || process.env.NODE_ENV == 'development') {
+//     globalSettings.openPermission = true
+//     globalSettings.enableNotification = true
+//     globalSettings.enableSidebarCollapse = true
+//     globalSettings.enableTabbar = true
+//     globalSettings.enableI18n = true
+//     globalSettings.enableFullscreen = true
+//     globalSettings.enablePageReload = true
+//     globalSettings.enableDynamicTitle = true
+//     globalSettings.enableErrorLog = true
+// }
 
 export default globalSettings

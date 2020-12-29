@@ -6,11 +6,12 @@
           class="l-search-input"
           v-model="userName"
           placeholder="请输入渠道名称"
+          disabled
         />
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" disabled icon="el-icon-search">搜索</el-button>
       </div>
       <div class="l-table-content">
-        <el-table :data="list" border style="width: 100%;" v-loading="loading">
+        <el-table :data="list" height="100%" border style="width: 100%;" v-loading="loading">
           <el-table-column
             prop="name"
             label="加盟系统名称"

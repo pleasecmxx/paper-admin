@@ -1,4 +1,5 @@
 import { deepClone } from '@/util'
+import router from '../../router/index';
 
 function hasPermission(permissions, route) {
     let isAuth = false
@@ -55,9 +56,13 @@ const actions = {
             let accessedRoutes
             // 判断权限功能是否开启
             if (rootState.settings.openPermission) {
-                console.log("bbb")
+                // console.log("bbb")
                 const permissions = await dispatch('user/getPermissions', null, { root: true })
-                accessedRoutes = filterAsyncRoutes(data.asyncRoutes, permissions)
+                if(permissions.length > 0){
+                    accessedRoutes = filterAsyncRoutes(data.asyncRoutes, permissions)
+                }else {
+                    router.push('/login')
+                }
             } else {
                 accessedRoutes = data.asyncRoutes
             }

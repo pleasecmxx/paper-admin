@@ -10,16 +10,22 @@
           : 'l-tab-table-container',
       ]"
     >
-      <el-table height="100%" :data="list" border style="width: 100%;">
+      <el-table
+        height="100%"
+        :data="list"
+        border
+        style="width: 100%;"
+        v-loading="loading"
+      >
         <el-table-column
           prop="date"
           label="提交日期"
           width="180"
           align="center"
         >
-        <template slot-scope="scope">
-          <p>{{formatTime(scope.row.submit_time)}}</p>
-        </template>
+          <template slot-scope="scope">
+            <p>{{ formatTime(scope.row.submit_time) }}</p>
+          </template>
         </el-table-column>
         <el-table-column
           prop="date"
@@ -27,10 +33,10 @@
           width="120"
           align="center"
         >
-        <template slot-scope="scope">
-          <p v-if="scope.row.withdraw_user__identity == 1">店铺</p>
-          <p v-else-if="scope.row.withdraw_user__identity == 2">代理</p>
-        </template>
+          <template slot-scope="scope">
+            <p v-if="scope.row.withdraw_user__identity == 1">店铺</p>
+            <p v-else-if="scope.row.withdraw_user__identity == 2">代理</p>
+          </template>
         </el-table-column>
         <el-table-column
           prop="withdraw_account_number"
@@ -45,15 +51,32 @@
           align="center"
           width="120"
         >
-        <template slot-scope="scope">
-          <p>￥{{scope.row.withdraw_number}}</p>
-        </template>
+          <template slot-scope="scope">
+            <p>￥{{ scope.row.withdraw_number }}</p>
+          </template>
         </el-table-column>
-        <el-table-column prop="phone_number" label="到账支付宝" align="center" width="120">
+        <el-table-column
+          prop="phone_number"
+          label="到账支付宝"
+          align="center"
+          width="120"
+        >
         </el-table-column>
-        <el-table-column prop="withdraw_man_name" label="到账支付宝姓名" align="center" width="96">
+        <el-table-column
+          prop="withdraw_man_name"
+          label="到账支付宝姓名"
+          align="center"
+          width="156"
+        >
         </el-table-column>
-        <el-table-column prop="withdraw_desc" label="提现说明" align="center">
+        <el-table-column prop="withdraw_desc" label="提现说明" align="center" v-if="type === 1">
+        </el-table-column>
+        <el-table-column prop="withdraw_desc" label="打款凭证" align="center" v-else-if="type === 2">
+            <template slot-scope="scope">
+                <el-image :src="scope.row.withdraw_voucher" class="withdraw_voucher"/>
+            </template>
+        </el-table-column>
+        <el-table-column prop="withdraw_denial_reason" label="拒绝原因" align="center" v-else-if="type === 3">
         </el-table-column>
         <el-table-column
           v-if="type === 1"
@@ -76,7 +99,7 @@
       </el-table>
     </div>
     <div class="l-page-jumper l-flex-row-start">
-      <el-pagination background layout="prev, pager, next" :total="1000">
+      <el-pagination background layout="prev, pager, next" :total="total">
       </el-pagination>
     </div>
     <el-dialog
@@ -84,6 +107,7 @@
       :visible.sync="dialogShow"
       :width="isPc ? '50%' : '96%'"
       v-if="type == 1"
+      @finish="onFinish"
     >
       <check-dialog ref="checkDialogRef" :closeDialog="closeDialog" />
     </el-dialog>
@@ -105,6 +129,7 @@ export default {
     return {
       isPc: isPC(),
       dialogShow: false,
+      loading: false,
       list: [],
       page: 1,
       total: 0,
@@ -114,35 +139,50 @@ export default {
     this.getListByPage();
   },
   methods: {
-    formatTime(t){
-      return formatUTCTime(t)
+    formatTime(t) {
+      return formatUTCTime(t);
+    },
+    refresh() {
+      this.getListByPage();
+    },
+    onFinish() {
+      this.$message.success("操作成功");
+      this.getListByPage();
+      this.$emit("handleRefresh");
     },
     getListByPage() {
+      this.loading = true;
       let params = {
         withdraw_status: this.type,
         page: this.page,
       };
       api
-        .get(takeCashPlatformListApi, {params})
+        .get(takeCashPlatformListApi, { params })
         .then((res) => {
-          console.log(res)
+          this.loading = false;
+          console.log(res);
           if (res.code === 200) {
             this.list = res.data.list;
-            this.$emit('send_total_money',{money: res.data.total_money, type: this.type})
+            this.total = res.data.count;
+            this.$emit("send_total_money", {
+              money: res.data.total_money ? res.data.total_money : 0,
+              type: this.type,
+            });
           } else {
             this.$message.error(res.msg);
           }
         })
         .catch((err) => {
           console.log(err);
+          this.loading = false;
           this.$message.error("操作失败，请稍后重试");
         });
     },
     showCheckDialog(row) {
       this.dialogShow = true;
       this.$nextTick(() => {
-        this.$refs['checkDialogRef'].setEditData(row)
-      })
+        this.$refs["checkDialogRef"].setEditData(row);
+      });
     },
     closeDialog() {
       this.dialogShow = false;
@@ -162,5 +202,9 @@ export default {
     /* background-color: red; */
 
     /* overflow-y: auto; */
+}
+.withdraw_voucher {
+    width: 52px;
+    height: 80px;
 }
 </style>

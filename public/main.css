@@ -364,3 +364,10 @@ input::-webkit-outer-spin-button {
     height: 72px;
     border-radius: 6px;
 }
+
+.BMap_cpyCtrl {
+    display: none !important;
+}
+.anchorBL {
+    display: none !important;
+}

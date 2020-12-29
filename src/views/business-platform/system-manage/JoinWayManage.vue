@@ -13,7 +13,13 @@
         >
       </div>
       <div class="l-table-content">
-        <el-table :data="list" border style="width: 100%;" v-loading="loading">
+        <el-table
+          :data="list"
+          height="100%"
+          border
+          style="width: 100%;"
+          v-loading="loading"
+        >
           <el-table-column
             prop="name"
             label="加盟系统名称"
@@ -87,7 +93,7 @@
                 查看详情
               </el-button>
               <el-button
-                @click.native.prevent="showDetailsDialog(scope.$index)"
+                @click.native.prevent="editRow(scope.row)"
                 type="text"
                 size="small"
               >
@@ -121,8 +127,13 @@
       :visible.sync="dialogShow"
       :width="isPc ? '65%' : '96%'"
       :top="'5vh'"
+      destroy-on-close
     >
-      <add-join-way-dialog :closeDialog="closeDialog" @finish="onAddFinish" />
+      <add-join-way-dialog
+        ref="addDialogRef"
+        :closeDialog="closeDialog"
+        @finish="onAddFinish"
+      />
     </el-dialog>
   </div>
 </template>
@@ -195,6 +206,12 @@ export default {
 
     showDetailsDialog() {},
 
+    editRow(row) {
+      this.dialogShow = true;
+      this.$nextTick(() => {
+        this.$refs["addDialogRef"].setEditData(row);
+      });
+    },
     deleteChannel(row) {
       let _this = this;
       this.$confirm("此操作将永久删除此项, 是否继续?", "提示", {

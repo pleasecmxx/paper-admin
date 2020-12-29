@@ -80,6 +80,7 @@ export default {
         this.dataLoading = false;
         console.log("可提现金额", res);
         if (res.code === 200) {
+          // this.cashOrignNumber =
           this.cashNumber = Number(res.data.cumulative_commission).toFixed(2);
         } else {
           this.$message.error(res.msg);
@@ -104,7 +105,7 @@ export default {
           return this.$message.error("请输入到账人姓名");
         }
         let params = {
-          withdraw_number: parseFloat(this.cashNumber),
+          withdraw_number: parseFloat(Math.floor(this.cashOrignNumber)),
           withdraw_man_name: this.takeCashAlipayName,
           withdraw_phone_number: this.takeCashAlipayAccount,
           withdraw_desc: this.takeCashRemark,
@@ -112,6 +113,8 @@ export default {
         api
           .post(askTackCashApi, params)
           .then((res) => {
+
+              console.log(res)
             if (res.code === 200) {
               this.$message.success("操作成功");
               this.$emit("finish");

@@ -4,10 +4,10 @@
       <div class="l-dialog-half-row l-flex-row-start">
         <p class="min-width-text5">审核结果</p>
         <el-radio v-model="radio" label="1">同意，进行打款</el-radio>
-        <el-radio v-model="radio" label="2">拒绝</el-radio>
+        <el-radio v-model="radio" label="0">拒绝</el-radio>
       </div>
     </div>
-    <div v-if="radio === '2'" class="l-dialog-row l-flex-row-start height-auto">
+    <div v-if="radio === '0'" class="l-dialog-row l-flex-row-start height-auto">
       <p class="min-width-text5">拒绝原因</p>
       <el-input
         type="textarea"
@@ -45,10 +45,18 @@
     </div>
     <div class="l-dialog-option-footer">
       <el-button @click="cancelDialog">取 消</el-button>
-      <el-button :loading="addLoading" v-if="radio === '1'" @click="confirmOption" type="primary"
+      <el-button
+        :loading="addLoading"
+        v-if="radio === '1'"
+        @click="confirmOption"
+        type="primary"
         >确认通过</el-button
       >
-      <el-button :loading="addLoading" v-else @click="confirmOption" type="danger"
+      <el-button
+        :loading="addLoading"
+        v-else
+        @click="confirmOption"
+        type="danger"
         >确认拒绝</el-button
       >
     </div>
@@ -57,7 +65,11 @@
 
 <script>
 import { isEmpty } from "./../../../util";
-import { comon_image_uploader, addChannel, confirmPassOrNotTakeCashApi } from "./../../../api/admin-api";
+import {
+  comon_image_uploader,
+  addChannel,
+  confirmPassOrNotTakeCashApi,
+} from "./../../../api/admin-api";
 import store from "@/store/index";
 import api from "./../../../api";
 
@@ -74,7 +86,7 @@ export default {
       radio: "1",
       remark: "",
       addLoading: false,
-      editData: null
+      editData: null,
     };
   },
   methods: {
@@ -108,13 +120,13 @@ export default {
       let title;
       if (this.radio === "1") {
         title = "确认通过当前提现申请？";
-        if(!this.imageUrl){
-          return this.$message.error("请上传打款凭证")
+        if (!this.imageUrl) {
+          return this.$message.error("请上传打款凭证");
         }
       } else {
         title = "确认驳回当前提现申请？";
-        if(!this.remark){
-          return this.$message.error("请输入驳回原因")
+        if (!this.remark) {
+          return this.$message.error("请输入驳回原因");
         }
       }
       this.$confirm(title, "确认提示", {
@@ -122,30 +134,37 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       })
-      .then(res => {
-        this.addLoading = true;
-        let params = {
-          withdraw_id: this.editData.id,
-          withdraw_status: this.radio,
-        };
-        if(this.radio === "2"){
-          params.withdraw_denial_reason = this.remark;
-        }else {
-          params.withdraw_voucher = this.imageUrl;
-        }
-        api.post(confirmPassOrNotTakeCashApi, params)
-        .then(res => {
-          console.log("体现申请结果",res);
-           this.closeDialog();
+        .then((res) => {
+          this.addLoading = true;
+          let params = {
+            withdraw_id: this.editData.id,
+            withdraw_status: this.radio,
+          };
+          if (this.radio === "0") {
+            params.withdraw_denial_reason = this.remark;
+          } else {
+            params.withdraw_voucher = this.imageUrl;
+          }
+          api
+            .post(confirmPassOrNotTakeCashApi, params)
+            .then((res) => {
+              console.log("体现申请结果", res);
+              this.addLoading = false;
+              if (res.code === 200) {
+                this.$emit("finish");
+                this.closeDialog();
+              } else {
+                this.$message.error(res.msg);
+              }
+            })
+            .catch((err) => {
+              this.addLoading = false;
+              this.$message.error("操作失败，请稍后重试");
+            });
         })
-        .catch(err => {
-          this.$message.error("操作失败，请稍后重试")
-        })
-      })
-      .catch(err => {
-        console.log("出错了",err)
-      })
-     
+        .catch((err) => {
+          console.log("出错了", err);
+        });
     },
   },
 };

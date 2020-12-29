@@ -23,7 +23,7 @@
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
       </div>
       <div class="l-table-content">
-        <el-table :data="list" border style="width: 100%;">
+        <el-table :data="list" height="100%" border style="width: 100%;">
           <el-table-column
             prop="shop_name"
             label="店铺名称"

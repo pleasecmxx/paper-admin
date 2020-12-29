@@ -58,6 +58,10 @@ import './assets/styles/reset.scss'
 import './util/error.log'
 
 import './mock'
+import BaiduMap from 'vue-baidu-map';
+Vue.use(BaiduMap, {
+    ak: 'A4oMBLHn6P3dNgsxz9XxrPxdQAFr7url'
+  });
 
 Vue.config.productionTip = false
 

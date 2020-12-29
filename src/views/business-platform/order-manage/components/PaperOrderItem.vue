@@ -35,7 +35,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="支付方式" align="center" width="96">
-            <p>微信扫码支付</p>
+          <p>微信扫码支付</p>
         </el-table-column>
         <el-table-column prop="name" label="金额" align="center" width="96">
           <template slot-scope="scope">
@@ -76,10 +76,22 @@
         >
           -
         </el-table-column>
-        <el-table-column prop="name" label="推荐店铺" align="center" width="96">
+        <el-table-column prop="name" label="下单渠道" align="center" width="266">
           <template slot-scope="scope">
-            <p v-if="scope.row.type == '1'">平台系统</p>
-            <p v-else>店铺系统</p>
+            <p
+              @click="
+                openUrl(
+                  'http://www.' + scope.row.secondary_domain + '.lwcc.net'
+                )
+              "
+              class="url-link"
+              title="点击打开"
+            >
+              http://www.<span style="color: #f00;">{{
+                scope.row.secondary_domain
+              }}</span
+              >.lwcc.net
+            </p>
           </template>
         </el-table-column>
       </el-table>
@@ -126,6 +138,10 @@ export default {
       this.getListByPage(page);
     },
 
+    openUrl(url) {
+      window.open(url);
+    },
+
     getListByPage(current_page) {
       this.loading = true;
       api
@@ -166,5 +182,9 @@ export default {
     width: 100%;
     height: calc(100% - 46px);
     overflow: hidden;
+}
+.url-link {
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>

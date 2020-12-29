@@ -7,8 +7,9 @@
             <p class="min-width-text5">原密码</p>
             <el-input
               class="l-dialog-input"
-              v-model="userName"
+              v-model="old_password"
               placeholder="请输入店铺原密码"
+              type="password"
             />
           </div>
         </div>
@@ -17,8 +18,10 @@
             <p class="min-width-text5">现密码</p>
             <el-input
               class="l-dialog-input"
-              v-model="userName"
+              v-model="new_password"
               placeholder="请输入现密码"
+              type="password"
+              :maxlength="24"
             />
           </div>
         </div>
@@ -27,13 +30,19 @@
             <p class="min-width-text5">确认现密码</p>
             <el-input
               class="l-dialog-input"
-              v-model="userName"
+              v-model="re_new_password"
               placeholder="请再输入一遍现密码"
+              type="password"
+              :maxlength="24"
             />
           </div>
         </div>
         <div style="padding-right: 40%;" class="l-dialog-option-footer">
-          <el-button style="width: 120px;" @click="confirmAdd" type="primary"
+          <el-button
+            style="width: 120px;"
+            :loading="addLoading"
+            @click="confirmAdd"
+            type="primary"
             >保存</el-button
           >
         </div>
@@ -43,6 +52,10 @@
 </template>
 
 <script>
+import api from '../../../api';
+
+import { editPasswordApi} from './../../../api/admin-api'
+import { isEmpty, validAccount } from "../../../util";
 export default {
   name: "EditPassword",
   props: {
@@ -51,12 +64,51 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      old_password: "",
+      new_password: "",
+      re_new_password: "",
+      addLoading: false,
+    };
+  },
   methods: {
-    cancelDialog() {
-      this.closeDialog();
-    },
     confirmAdd() {
-      this.closeDialog();
+      if (isEmpty(this.old_password)) {
+        return this.$message.error("请输入原始密码");
+      }
+      if (isEmpty(this.new_password)) {
+        return this.$message.error("请输入新密码");
+      }
+      if (!validAccount(this.new_password)) {
+        return this.$message.error("密码格式不正确，只允许字母、数字");
+      }
+      if (isEmpty(this.re_new_password)) {
+        return this.$message.error("请再次输入新密码");
+      }
+      if (this.new_password !== this.re_new_password) {
+        return this.$message.error("前后两次新密码输入不一致，请重新输入");
+      }
+      this.addLoading = true;
+      let params = {
+        old_password: this.old_password,
+        new_password: this.new_password,
+      };
+      api.post(editPasswordApi,params)
+      .then(res => {
+          this.addLoading = false;
+          console.log("编辑密码结果",res);
+          if(res.code === 200){
+              this.$message.success("编辑成功")
+          }else {
+              this.$message.error(res.msg)
+          }
+      })
+      .catch(err => {
+          this.addLoading = false;
+          console.log("编辑密码出错了，请稍后重试")
+          this.$message.error('操作失败，请稍后重试')
+      })
     },
   },
 };

@@ -111,8 +111,9 @@ export const deepCopy = value => {
 export const formatUTCTime = (str) => {
     let date = new Date(str);
     let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    // console.log("------",day)
     let hour = date.getHours();
     let min = date.getMinutes();
     let sec = date.getSeconds();
@@ -154,3 +155,34 @@ export const formatUTCTime = (str) => {
     };
     return year + '-' + month + '-' + day;
  };
+
+
+ /**
+ * 待检测的值，
+ * @param {*} value
+ */
+export const validDomin = (value) => {
+    console.log('----')
+    // let e = /^[\u4E00-\u9FA5|a-zA-Z][\w\u4E00-\u9FA5|0-9a-zA-Z]*$/;
+    // let e = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/
+    // let e = /^\w+$/
+    // let e = /^[A-Za-z0-9-]$/
+    let e = /^[A-Za-z\-]+$/
+    console.log(e.test(value))
+    return e.test(value)
+}
+
+
+/**
+ * 待检测的值，
+ * @param {*} value
+ */
+export const validAccount = (value) => {
+    // let e = /^[\u4E00-\u9FA5|a-zA-Z][\w\u4E00-\u9FA5|0-9a-zA-Z]*$/;
+    // let e = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/
+    // let e = /^\w+$/
+    // let e = /^[A-Za-z0-9-]$/
+    let e = /^[A-Za-z0-9]+$/
+    // let e = /^[^\u4e00-\u9fa5]+$/
+    return e.test(value)
+}

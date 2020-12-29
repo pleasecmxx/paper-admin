@@ -127,7 +127,10 @@
           </el-option>
         </el-select>
       </div>
-      <div class="l-dialog-half-row l-flex-row-start" v-if="billing_method !== 'char'">
+      <div
+        class="l-dialog-half-row l-flex-row-start"
+        v-if="billing_method !== 'char'"
+      >
         <p class="min-width-text4">文件类型</p>
         <el-select
           v-model="activeFileTypes"
@@ -155,7 +158,11 @@
 
 <script>
 import { isEmpty } from "../../../../util";
-import { comon_image_uploader, addChannel } from "./../../../../api/admin-api";
+import {
+  comon_image_uploader,
+  addChannel,
+  eidtChannleApi,
+} from "./../../../../api/admin-api";
 import store from "@/store/index";
 import api from "../../../../api";
 
@@ -185,7 +192,7 @@ export default {
       agency_commission: "",
       shop_commission: "",
       addLoading: false,
-      activeFileTypes: ['.doc','.word','.docx'],
+      activeFileTypes: [".doc", ".word", ".docx"],
       billing_method_options: [
         {
           value: "char",
@@ -224,14 +231,32 @@ export default {
           label: ".docx",
         },
       ],
+      editData: null,
+      isEdit: false,
     };
   },
   watch: {
-      activeFileTypes: function (value, oValue){
-          console.log(value)
-      }
+    activeFileTypes: function (value, oValue) {
+      console.log(value);
+    },
   },
   methods: {
+    setEditData(data) {
+      console.log("编辑数据", data);
+      this.isEdit = true;
+      this.editData = data;
+      this.name = data.name;
+      this.tag = data.tag;
+      this.billing_method = data.billing_method;
+      this.init_sales = data.init_sales;
+      // this.literature_library = data.literature_library;
+      this.logo = data.logo;
+      this.price = data.price;
+      this.desc = data.desc;
+      this.agency_commission = data.agency_commission;
+      this.shop_commission = data.shop_commission;
+      this.imageUrl = data.logo;
+    },
     onUploaderSuccess(e) {
       if (e.code === 200) {
         this.imageUrl = e.data.list[0].url;
@@ -294,8 +319,13 @@ export default {
         agency_commission: this.agency_commission,
         shop_commission: this.shop_commission,
       };
+      let request_api = addChannel;
+      if (this.isEdit) {
+        request_api = eidtChannleApi;
+        data.id = this.editData.id;
+      }
       api
-        .post(addChannel, data)
+        .post(request_api, data)
         .then((res) => {
           console.log(res);
           if (res.code === 200) {

@@ -155,38 +155,6 @@ export default {
     },
   },
   created() {
-    let m = {
-      //   key: "7cc025a9-27ee-4160-91bf-cb89d344afcc",
-      text: "搬迁之前牧生活",
-      title: "title",
-      author: "author",
-      order_id: "1232543651236547",
-      product_code: "paperok",
-      app_id: "1f633e85",
-      file: null,
-    };
-    const { keys, values } = Object;
-    let keyArr = keys(m);
-    let valueArr = values(m);
-    console.log(keyArr);
-    console.log(valueArr);
-    let newArr = [];
-    let newKeyArr = keyArr.sort(this.compare);
-    console.log(newKeyArr);
-    let newKeyAndValueArr = [];
-    newKeyArr.forEach((key) => {
-      newKeyAndValueArr.push(key + "=" + m[key]);
-    });
-    console.log("newKeyAndValueArr", newKeyAndValueArr);
-    let str = "";
-    newKeyAndValueArr.forEach((ele, index) => {
-      if (index === 0) {
-        str = ele;
-      } else {
-        str = str + "&" + ele;
-      }
-    });
-    console.log(str);
   },
 
   methods: {
@@ -211,12 +179,16 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("user/login", this.form)
-            .then(() => {
+            .then((res) => {
+              console.log(res);
               this.loading = false;
-              this.form.remember &&
-                localStorage.setItem("login_account", this.form.account);
-              console.log("redirect", this.redirect);
-              this.$router.push({ path: this.redirect || "/" });
+              if (res === "ok") {
+                this.form.remember &&
+                  localStorage.setItem("login_account", this.form.account);
+                console.log("redirect", this.redirect);
+                this.$router.push({ path: this.redirect || "/" });
+              } else {
+              }
             })
             .catch(() => {
               this.loading = false;

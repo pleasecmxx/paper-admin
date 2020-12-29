@@ -5,6 +5,7 @@ import { Message } from 'element-ui';
 // import { reject } from 'core-js/fn/promise';
 import { isEmpty } from '../../util';
 import { loginApi, userInfoApi } from './../../api/admin-api';
+import { Router } from 'vue-router';
 
 const state = {
     account: localStorage.account,
@@ -34,7 +35,7 @@ const actions = {
             // 通过 mock 进行登录
             api.post(loginApi, data).then(res => {
                 console.log(res);
-                if (res.code = 200) {
+                if (res.code == 200) {
                     let params = {
                         account: data.account,
                         password: data.password,
@@ -42,10 +43,10 @@ const actions = {
                         failure_time: Date.parse(new Date()) / 1000 + 24 * 60 * 60,
                     }
                     commit('setUserData', params);
-                    resolve();
+                    resolve("ok");
                 } else {
                     Message.error(res.msg)
-                    resolve();
+                    resolve("error");
                 }
             })
         },
@@ -82,7 +83,7 @@ const actions = {
                         token: state.token,
                         failure_time: Date.parse(new Date()) / 1000 + 24 * 60 * 60,
                         systemLogo: res.data && res.data.logo && res.data.logo.url && !isEmpty(res.data.logo.url) ? res.data.logo.url : 'http://',
-                        systemTitle: res.data.name,
+                        systemTitle: res.data.platform_name,
                     }
                     commit('setUserData', params);
                     resolve(permissions);

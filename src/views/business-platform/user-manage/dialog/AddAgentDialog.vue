@@ -137,7 +137,7 @@ export default {
   watch: {
     agentAccount: function (val, oVal) {
       console.log(val, oVal);
-      this.uploaderFileExtraParams.account_number = val
+      this.uploaderFileExtraParams.account_number = val;
     },
   },
   created() {
@@ -181,6 +181,7 @@ export default {
           this.handleAddAgentLoading = false;
           console.log(res);
           if (res.code === 200) {
+            this.$emit("finish");
             this.closeDialog();
           } else {
             this.$message.error(res.msg);

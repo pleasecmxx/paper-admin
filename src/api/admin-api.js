@@ -62,3 +62,15 @@ export const askTackCashApi = 'api/management/withdrawal_application';  //提现
 export const takeCashRecordListApi = 'api/management/withdrawal_recordList_list';  //提现记录
 
 export const confirmPassOrNotTakeCashApi = 'api/management/platdorm/withdraw_review';
+
+/***************** 代理端 *******************/
+
+export const agentShopList = 'api/management/agent/shop_list';   //店铺列表
+export const agentCreateShopApi = 'api/management/agent/shop_create'  //代理创建店铺
+export const agentEditShopApi = 'api/management/agent/shop_edit'; //代理编辑店铺
+export const agentOrderListApi = 'api/management/agent/agent_order_list';  //代理
+
+
+export const editPasswordApi = 'api/management/edit_password';  //编辑密码接口
+
+export const eidtChannleApi = '/api/management/channel_config_edit';  //编辑加盟渠道

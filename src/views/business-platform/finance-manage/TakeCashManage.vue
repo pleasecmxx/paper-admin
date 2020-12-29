@@ -7,20 +7,24 @@
             <p class="l-tab-item-title">待审核</p>
             <p class="l-tab-item-price">¥{{money1}}</p>
           </div>
-          <take-cash-tab-item :type="1" @send_total_money="send_total_money"/>
+          <take-cash-tab-item
+            :type="1"
+            @send_total_money="send_total_money"
+            @handleRefresh="handleRefresh"
+        />
         </el-tab-pane>
         <el-tab-pane>
           <div class="l-flex-row-center l-tab-item" slot="label">
             <p class="l-tab-item-title">审核通过</p>
             <p class="l-tab-item-price">¥{{money2}}</p>
           </div>
-          <take-cash-tab-item :type="2"  @send_total_money="send_total_money"/>
+          <take-cash-tab-item :type="2" ref="tab2"  @send_total_money="send_total_money"/>
         </el-tab-pane>
         <el-tab-pane>
           <div class="l-flex-row-center l-tab-item" slot="label">
            <p class="l-tab-item-title">审核拒绝</p>
           </div>
-          <take-cash-tab-item :type="3"  @send_total_money="send_total_money"/>
+          <take-cash-tab-item :type="3" ref="tab3"  @send_total_money="send_total_money"/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -49,7 +53,12 @@ export default {
       }else if(type == 2){
         this.money2 = Number(money).toFixed(2)
       }
-    }
+    },
+
+    handleRefresh() {
+        this.$refs['tab2'].refresh();
+        this.$refs['tab3'].refresh();
+    },
   },
 };
 </script>

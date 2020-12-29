@@ -23,7 +23,13 @@
         >
       </div>
       <div class="l-table-content">
-        <el-table :data="list" border style="width: 100%;">
+        <el-table
+          :data="list"
+          height="100%"
+          v-loading="loading"
+          border
+          style="width: 100%;"
+        >
           <el-table-column
             prop="account_number"
             label="代理编号"
@@ -72,7 +78,7 @@
         </el-table>
       </div>
       <div class="l-page-jumper l-flex-row-start">
-        <el-pagination background layout="prev, pager, next" :total="1000">
+        <el-pagination background layout="prev, pager, next" :total="total" @current-change="currentPageChange">
         </el-pagination>
       </div>
     </div>
@@ -81,7 +87,7 @@
       :visible.sync="dialogShow"
       :width="isPc ? '45%' : '96%'"
     >
-      <add-agent-dialog :closeDialog="closeDialog" />
+      <add-agent-dialog @finish="onFinish" :closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -101,6 +107,8 @@ export default {
     return {
       isPc: isPC(),
       dialogShow: false,
+      total: 0,
+      loading: false,
       page: 1,
       list: [],
       agentSearchName: "",
@@ -109,26 +117,45 @@ export default {
   },
   created() {
     // console.log("1111");
-    let params = {
-      page: this.page,
-    };
-    api
-      .get(platform_user_manage_agent_list, {
-        params: params,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.code === 200) {
-          this.list = res.data.list;
-        } else {
-          this.$message.error(res.msg);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getDataByPage();
   },
   methods: {
+    getDataByPage() {
+      let params = {
+        page: this.page,
+      };
+      this.loading = true;
+      api
+        .get(platform_user_manage_agent_list, {
+          params: params,
+        })
+        .then((res) => {
+          this.loading = false;
+          console.log(res);
+          if (res.code === 200) {
+            this.list = res.data.list;
+            this.total = res.data.count;
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
+    },
+    onFinish() {
+      this.$message.success("操作成功");
+      this.getDataByPage();
+    },
+
+    currentPageChange(page) {
+        this.page = page;
+        this.$nextTick(() => {
+            this.getDataByPage();
+        })
+    },
+
     closeDialog() {
       this.dialogShow = false;
     },

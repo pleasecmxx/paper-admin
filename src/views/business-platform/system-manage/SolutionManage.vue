@@ -13,7 +13,7 @@
         >
       </div>
       <div class="l-table-content">
-        <el-table :data="list" border style="width: 100%;" v-loading="loading">
+        <el-table :data="list" height="100%" border style="width: 100%;" v-loading="loading">
           <el-table-column prop="id" label="ID" width="96" align="center">
           </el-table-column>
           <el-table-column label="文章分类" align="center" width="180">
