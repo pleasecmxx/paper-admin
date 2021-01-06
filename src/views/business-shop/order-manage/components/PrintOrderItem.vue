@@ -157,6 +157,7 @@
       :visible.sync="writeOffOrderDialogShow"
       :width="isPc ? '50%' : '96%'"
       v-if="type === 2"
+      destroy-on-close
     >
       <write-off-order-dialog :closeDialog="closeDialog" />
     </el-dialog>

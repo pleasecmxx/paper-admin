@@ -73,26 +73,28 @@ export default {
       takeCashRemark: "",
     };
   },
-  created() {
-    api
-      .get(canTakeCashMoneyQuery, {})
-      .then((res) => {
-        this.dataLoading = false;
-        console.log("可提现金额", res);
-        if (res.code === 200) {
-          // this.cashOrignNumber =
-          this.cashNumber = Number(res.data.cumulative_commission).toFixed(2);
-        } else {
-          this.$message.error(res.msg);
-        }
-      })
-      .catch((err) => {
-        this.dataLoading = false;
-        console.log("出错了", err);
-        this.$message.error("操作失败，请稍后重试");
-      });
-  },
+  created() {},
   methods: {
+    getData() {
+      this.dataLoading = true;
+      api
+        .get(canTakeCashMoneyQuery, {})
+        .then((res) => {
+          this.dataLoading = false;
+          console.log("可提现金额", res);
+          if (res.code === 200) {
+            // this.cashOrignNumber =
+            this.cashNumber = Number(res.data.cumulative_commission).toFixed(2);
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+        .catch((err) => {
+          this.dataLoading = false;
+          console.log("出错了", err);
+          this.$message.error("操作失败，请稍后重试");
+        });
+    },
     cancelDialog() {
       this.closeDialog();
     },
@@ -113,8 +115,7 @@ export default {
         api
           .post(askTackCashApi, params)
           .then((res) => {
-
-              console.log(res)
+            console.log(res);
             if (res.code === 200) {
               this.$message.success("操作成功");
               this.$emit("finish");
@@ -147,7 +148,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 999;
+    z-index: 99999999999999;
     justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.72);

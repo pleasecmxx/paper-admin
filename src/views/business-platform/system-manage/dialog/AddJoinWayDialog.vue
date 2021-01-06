@@ -10,7 +10,7 @@
         />
       </div>
       <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text4">标签</p>
+        <p class="min-width-text5">标签</p>
         <el-input
           class="l-dialog-input"
           v-model="tag"
@@ -32,16 +32,17 @@
         </el-select>
       </div>
       <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text4">价格</p>
+        <p class="min-width-text5">价格</p>
         <el-input
           class="l-dialog-input"
           v-model="price"
           placeholder="请输入价格"
           type="number"
         />
-        <p v-if="billing_method === 'char'">/千字</p>
-        <p v-else-if="billing_method === 'page'">/页</p>
-        <p v-else-if="billing_method === 'article'">/篇</p>
+        <p style="width: 80px;" v-if="billing_method == 'char'">/千字</p>
+        <p style="width: 80px;" v-else-if="billing_method == 'char10'">/万字</p>
+        <p style="width: 80px;" v-else-if="billing_method == 'page'">/页</p>
+        <p style="width: 80px;" v-else-if="billing_method == 'article'">/篇</p>
       </div>
     </div>
     <div class="l-dialog-row l-flex-row-start height-auto">
@@ -54,7 +55,7 @@
         />
       </div>
       <div class="l-dialog-half-row l-flex-row-start height-auto">
-        <p class="min-width-text4">logo</p>
+        <p class="min-width-text5">logo</p>
         <el-upload
           class="upload-demo"
           drag
@@ -78,45 +79,13 @@
         </el-upload>
       </div>
     </div>
-    <div style="margin-bottom: 18px;" class="l-dialog-row l-flex-row-start">
-      <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text5">代理佣金</p>
-        <el-input
-          class="l-dialog-input"
-          v-model="agency_commission"
-          placeholder="请设定代理佣金"
-        />
-        <p>%</p>
-        <p class="dec-text">支付额的百分比</p>
-      </div>
-      <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text4">店铺佣金</p>
-        <el-input
-          class="l-dialog-input"
-          v-model="shop_commission"
-          placeholder="请设定店铺佣金"
-        />
-        <p>%</p>
-        <p class="dec-text">支付额的百分比</p>
-      </div>
-    </div>
-    <div class="l-dialog-row l-flex-row-start height-auto">
-      <p class="min-width-text5">简介</p>
-      <el-input
-        type="textarea"
-        :rows="4"
-        class="l-dialog-input"
-        v-model="desc"
-        placeholder="请输入系统简介(不超过72字)"
-        maxlength="72"
-      />
-    </div>
     <div class="l-dialog-row l-flex-row-start">
       <div class="l-dialog-half-row l-flex-row-start">
         <p class="min-width-text5">渠道类型</p>
         <el-select
           v-model="franchise_channel_class"
           placeholder="请选择渠道类型"
+          style="width: 100%;"
         >
           <el-option
             v-for="item in channelType"
@@ -127,24 +96,123 @@
           </el-option>
         </el-select>
       </div>
-      <div
-        class="l-dialog-half-row l-flex-row-start"
-        v-if="billing_method !== 'char'"
-      >
-        <p class="min-width-text4">文件类型</p>
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">分佣方式</p>
         <el-select
-          v-model="activeFileTypes"
-          placeholder="请选择接收的文件（多选）"
-          multiple
+          v-model="dispatchMethod"
+          placeholder="请选择分佣方式"
+          style="width: 100%;"
         >
           <el-option
-            v-for="item in fileTypes"
+            v-for="item in dispatchMethodOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           >
           </el-option>
         </el-select>
+      </div>
+    </div>
+    <div
+      style="margin-bottom: 18px;"
+      class="l-dialog-row l-flex-row-start"
+      v-if="dispatchMethod === 1"
+    >
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">代理佣金</p>
+        <el-input
+          type="number"
+          class="l-dialog-input"
+          v-model="agency_commission"
+          placeholder="请设定代理佣金"
+        />
+        <p>%</p>
+        <p class="dec-text">支付额的百分比</p>
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">店铺佣金</p>
+        <el-input
+          type="number"
+          class="l-dialog-input"
+          v-model="shop_commission"
+          placeholder="请设定店铺佣金"
+        />
+        <p>%</p>
+        <p class="dec-text">支付额的百分比</p>
+      </div>
+    </div>
+    <div
+      style="margin-bottom: 18px;"
+      class="l-dialog-row l-flex-row-start"
+      v-if="dispatchMethod === 2"
+    >
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">代理佣金</p>
+        <el-input
+          type="number"
+          class="l-dialog-input"
+          v-model="agency_commission_price"
+          placeholder="请设定代理佣金"
+        />
+        <p>元</p>
+        <p class="dec-text">固定金额/有效订单</p>
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">店铺佣金</p>
+        <el-input
+          class="l-dialog-input"
+          type="number"
+          v-model="shop_commission_price"
+          placeholder="请设定店铺佣金"
+        />
+        <p>元</p>
+        <p class="dec-text">固定金额/有效订单</p>
+      </div>
+    </div>
+    <div
+      class="l-dialog-row l-flex-row-start height-auto"
+      style="padding-right: 18px;"
+    >
+      <p class="min-width-text5">简介</p>
+      <el-input
+        type="textarea"
+        style="width: 100%;"
+        :rows="4"
+        class="l-dialog-input"
+        v-model="desc"
+        placeholder="请输入系统简介(不超过72字)"
+        maxlength="72"
+      />
+    </div>
+    <div class="l-dialog-row l-flex-row-start">
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">文献库</p>
+        <el-select
+          v-model="literature_library"
+          multiple
+          filterable
+          allow-create
+          default-first-option
+          placeholder="请输入文献库"
+          style="width: 100%;"
+        >
+          <el-option
+            v-for="item in literature_library_options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">产品CODE</p>
+        <el-input
+          class="l-dialog-input"
+          type="text"
+          v-model="code"
+          placeholder="请设定产品代码"
+        />
       </div>
     </div>
     <div class="l-dialog-option-footer">
@@ -189,11 +257,21 @@ export default {
       price: "",
       init_sales: "",
       desc: "",
-      agency_commission: "",
-      shop_commission: "",
+      agency_commission: "", //代理分佣比例
+      shop_commission: "", //店铺分佣比例
+      agency_commission_price: "", //代理固定分佣金额
+      shop_commission_price: "", //店铺佣金固定金额
+      literature_library: [], //文献库
+      code: "",
+      literature_library_options: [],
       addLoading: false,
       activeFileTypes: [".doc", ".word", ".docx"],
+      dispatchMethod: 1,
       billing_method_options: [
+        {
+          value: "char10",
+          label: "按万字",
+        },
         {
           value: "char",
           label: "按千字",
@@ -207,14 +285,24 @@ export default {
           label: "按页",
         },
       ],
-      channelType: [
+      dispatchMethodOptions: [
         {
-          value: "1",
-          label: "权威系统",
+          value: 1,
+          label: "按比例分佣",
         },
         {
-          value: "2",
-          label: "官方系统",
+          value: 2,
+          label: "按固定金额分佣",
+        },
+      ],
+      channelType: [
+        {
+          value: 2,
+          label: "优选系统",
+        },
+        {
+          value: 1,
+          label: "权威系统",
         },
       ],
       fileTypes: [
@@ -239,6 +327,16 @@ export default {
     activeFileTypes: function (value, oValue) {
       console.log(value);
     },
+    dispatchMethod: function (val) {
+      if (val === 1) {
+        //比例
+        this.shop_commission_price = "";
+        this.agency_commission_price = "";
+      } else {
+        this.agency_commission = "";
+        this.shop_commission = "";
+      }
+    },
   },
   methods: {
     setEditData(data) {
@@ -256,6 +354,7 @@ export default {
       this.agency_commission = data.agency_commission;
       this.shop_commission = data.shop_commission;
       this.imageUrl = data.logo;
+      this.franchise_channel_class = data.franchise_channel_class;
     },
     onUploaderSuccess(e) {
       if (e.code === 200) {
@@ -288,16 +387,25 @@ export default {
       if (isEmpty(this.tag)) {
         return this.$message.error("请输入系统标签");
       }
-      if (isEmpty(this.name)) {
+      if (isEmpty(this.price)) {
         return this.$message.error("请设置价格");
       }
-      if (isEmpty(this.name)) {
-        return this.$message.error("请设置代理佣金占比");
+      if (this.dispatchMethod === 1) {
+        if (isEmpty(this.agency_commission)) {
+          return this.$message.error("请设置代理佣金占比");
+        }
+        if (isEmpty(this.shop_commission)) {
+          return this.$message.error("请设置店铺佣金占比");
+        }
+      } else {
+        if (isEmpty(this.agency_commission_price)) {
+          return this.$message.error("请设置代理固定佣金");
+        }
+        if (isEmpty(this.shop_commission_price)) {
+          return this.$message.error("请设置店铺固定佣金");
+        }
       }
-      if (isEmpty(this.name)) {
-        return this.$message.error("请设置店铺佣金占比");
-      }
-      if (isEmpty(this.name)) {
+      if (isEmpty(this.desc)) {
         return this.$message.error("请输入系统描述文字");
       }
       if (isEmpty(this.logo)) {
@@ -305,6 +413,15 @@ export default {
       }
       if (isEmpty(this.franchise_channel_class)) {
         return this.$message.error("请选择渠道分类");
+      }
+      if (isEmpty(this.code)) {
+        return this.$message.error("请设定产品代码");
+      }
+      if (
+        isEmpty(this.literature_library) ||
+        this.literature_library.length === 0
+      ) {
+        return this.$message.error("请输入系统文献库");
       }
       this.addLoading = true;
       let data = {
@@ -316,14 +433,23 @@ export default {
         price: this.price,
         init_sales: this.init_sales,
         desc: this.desc,
-        agency_commission: this.agency_commission,
-        shop_commission: this.shop_commission,
+        literature_library: this.literature_library.toString(),
+        commission_type: this.dispatchMethod,
+        code: this.code
       };
+      if (this.dispatchMethod === 1) {
+        data.agency_commission = this.agency_commission;
+        data.shop_commission = this.shop_commission;
+      } else {
+        data.agency_commission_price = this.agency_commission_price;
+        data.shop_commission_price = this.shop_commission_price;
+      }
       let request_api = addChannel;
       if (this.isEdit) {
         request_api = eidtChannleApi;
         data.id = this.editData.id;
       }
+      console.log("data", data);
       api
         .post(request_api, data)
         .then((res) => {
@@ -352,6 +478,7 @@ export default {
 .l-dialog-content {
     width: 100%;
     height: 100%;
+    overflow-y: auto;
 }
 .l-dialog-row {
     width: 100%;
@@ -399,6 +526,7 @@ export default {
 }
 .min-width-text5 {
     min-width: 72px;
+    text-align: right;
 
     /* background-color: red; */
 }

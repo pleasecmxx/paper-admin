@@ -74,3 +74,4 @@ export const agentOrderListApi = 'api/management/agent/agent_order_list';  //代
 export const editPasswordApi = 'api/management/edit_password';  //编辑密码接口
 
 export const eidtChannleApi = '/api/management/channel_config_edit';  //编辑加盟渠道
+

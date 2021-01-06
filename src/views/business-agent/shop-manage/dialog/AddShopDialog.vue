@@ -30,14 +30,14 @@
       <div class="l-dialog-half-row l-flex-row-start">
         <p class="min-width-text5">域名配置</p>
         <div class="l-dialog-half-row-right l-flex-row-start" v-if="!isEdit">
-          <p>http://www.&nbsp;</p>
+          <!-- <p>http://www.&nbsp;</p> -->
           <el-input
-            :maxlength="6"
+            :maxlength="20"
             class="l-dialog-url-input"
             v-model="domin"
             placeholder=""
           />
-          <p>&nbsp;.lwcc.net</p>
+          <p style="width: 100px;">&nbsp;.lwcc.net</p>
         </div>
         <p v-else>http://www.{{ domin }}.lwcc.net（不可编辑）</p>
         <div class="valid-box" v-show="!checkDominValid(domin)">
@@ -515,7 +515,7 @@ export default {
     word-wrap: nowrap;
 }
 .l-dialog-url-input {
-    width: 86px;
+    width: 100%;
 }
 .map-box {
     width: 100%;

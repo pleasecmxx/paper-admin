@@ -27,7 +27,7 @@
         :picker-options="pickerOptions"
       >
       </el-date-picker>
-      <el-button type="success" @click="dialogShow = true" icon="el-icon-plus"
+      <el-button type="success" @click="woyaotixian" icon="el-icon-plus"
         >我要提现</el-button
       >
       <p class="notice-text" v-show="type === 2">
@@ -132,7 +132,7 @@
       :width="isPc ? '50%' : '96%'"
       destroy-on-close
     >
-      <take-cash-dialog :closeDialog="closeDialog" />
+      <take-cash-dialog ref="dialogRef" :closeDialog="closeDialog" />
     </el-dialog>
   </div>
 </template>
@@ -234,6 +234,12 @@ export default {
           console.log(err);
           this.$message.error("操作失败，请稍后重试");
         });
+    },
+    woyaotixian() {
+        this.dialogShow = true;
+        this.$nextTick(() => {
+            this.$refs['dialogRef'].getData();
+        })
     },
     onFinish() {
       //   this.page = 1;

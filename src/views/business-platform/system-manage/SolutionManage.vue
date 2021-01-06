@@ -120,6 +120,7 @@
       :width="isPc ? '60%' : '96%'"
       :append-to-body="true"
       destroy-on-close
+      v-if="refreshKit"
     >
       <preview-solution
         ref="previewSolutionRef"

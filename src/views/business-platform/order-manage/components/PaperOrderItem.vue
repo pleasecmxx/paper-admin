@@ -5,18 +5,18 @@
         <el-table-column
           prop="order_number"
           label="订单编号"
-          width="120"
+          width="240"
           align="center"
         >
         </el-table-column>
         <el-table-column
           prop="date"
           label="创建日期"
-          width="120"
+          width="180"
           align="center"
         >
           <template slot-scope="scope">
-            <p>{{ scope.row.create_time }}</p>
+            <p>{{ formatTime(scope.row.create_time) }}</p>
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" align="center" width="180">
@@ -27,15 +27,23 @@
           prop="name"
           label="文件名称"
           align="center"
-          width="120"
+          min-width="400"
         >
           <template slot-scope="scope">
             <p v-if="scope.row.file">{{ scope.row.file }}</p>
             <p v-else>粘贴复制提交</p>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="支付方式" align="center" width="96">
-          <p>微信扫码支付</p>
+        <el-table-column
+          prop="name"
+          label="支付方式"
+          align="center"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <p v-if="scope.row.payment_method === 1">支付宝支付</p>
+            <p v-else>微信支付</p>
+          </template>
         </el-table-column>
         <el-table-column prop="name" label="金额" align="center" width="96">
           <template slot-scope="scope">
@@ -76,7 +84,12 @@
         >
           -
         </el-table-column>
-        <el-table-column prop="name" label="下单渠道" align="center" width="266">
+        <el-table-column
+          prop="name"
+          label="下单渠道"
+          align="center"
+          width="266"
+        >
           <template slot-scope="scope">
             <p
               @click="
@@ -116,7 +129,8 @@ import {
   solutionList,
   paperOrderListApi,
 } from "./../../../../api/admin-api";
-import { isPC } from "./../../../../util/index";
+import { formatUTCTime, isPC } from "./../../../../util/index";
+
 export default {
   name: "PaperOrderItem",
   props: ["id"],
@@ -132,6 +146,9 @@ export default {
     this.getListByPage(1);
   },
   methods: {
+    formatTime(t) {
+      return formatUTCTime(t);
+    },
     currentPageChange(page) {
       console.log(page);
       this.page;

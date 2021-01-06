@@ -73,25 +73,27 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column label="文献库" align="center" width="140">
+            <template slot-scope="scope">
+              <div class="table-max-text-area">
+                <p>{{ scope.row.literature_library }}</p>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="代理佣金" align="center" width="96">
             <template slot-scope="scope">
-              <p>{{ scope.row.agency_commission }}%</p>
+              <p v-if="scope.row.franchise_channel_class === 1">{{ scope.row.agency_commission }}%</p>
+              <p v-if="scope.row.franchise_channel_class === 2">{{ scope.row.agency_commission_price }}元</p>
             </template>
           </el-table-column>
           <el-table-column label="店铺佣金" align="center" width="96">
             <template slot-scope="scope">
-              <p>{{ scope.row.shop_commission }}%</p>
+              <p v-if="scope.row.franchise_channel_class === 1">{{ scope.row.shop_commission }}%</p>
+              <p v-if="scope.row.franchise_channel_class === 2">{{ scope.row.shop_commission_price }}元</p>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="操作" align="center" width="180">
             <template slot-scope="scope">
-              <el-button
-                @click.native.prevent="showDetailsDialog(scope.$index)"
-                type="text"
-                size="small"
-              >
-                查看详情
-              </el-button>
               <el-button
                 @click.native.prevent="editRow(scope.row)"
                 type="text"

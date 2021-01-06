@@ -83,7 +83,7 @@
                 </el-col>
             </el-row>
         </page-main> -->
-        <page-main>
+        <!-- <page-main>
             <el-row :gutter="20">
                 <el-col :md="8">
                     <el-card shadow="hover" class="cube-card">
@@ -181,7 +181,7 @@
                     </el-card>
                 </el-col>
             </el-row>
-        </page-main>
+        </page-main> -->
     </div>
 </template>
 

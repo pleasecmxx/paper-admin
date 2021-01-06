@@ -1,6 +1,6 @@
 <template>
     <div class="editor">
-        <TinymceEditor v-model="myValue" :init="completeSetting" :disabled="disabled" />
+        <TinymceEditor v-model="myValue" :init="completeSetting" :disabled="false" />
     </div>
 </template>
 

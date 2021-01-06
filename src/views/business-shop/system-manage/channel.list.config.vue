@@ -88,6 +88,7 @@
       :visible.sync="dialogShow"
       :width="isPc ? '65%' : '96%'"
       :top="'5vh'"
+      destroy-on-close
     >
       <!-- <add-join-way-dialog :closeDialog="closeDialog" @finish="onAddFinish" /> -->
     </el-dialog>

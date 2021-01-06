@@ -131,6 +131,7 @@
       :visible.sync="dialogShow"
       :width="isPc ? '65%' : '96%'"
       :top="'5vh'"
+      destroy-on-close
     >
       <add-shop-dialog
         ref="shopDialogRef"
