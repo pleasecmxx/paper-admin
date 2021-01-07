@@ -129,11 +129,11 @@ export const formatUTCTime = (str) => {
     if (Number(hour) < 10) {
         hour = '0' + hour;
     };
-    return year + '-' + month + '-' + day + ' ' + hour + ":" +  min
- };
+    return year + '-' + month + '-' + day + ' ' + hour + ":" + min
+};
 
 
- export const formatUTCTimePoint = (str) => {
+export const formatUTCTimePoint = (str) => {
     let date = new Date(str);
     let year = date.getFullYear();
     let month = date.getMonth();
@@ -154,13 +154,13 @@ export const formatUTCTime = (str) => {
         hour = '0' + hour;
     };
     return year + '-' + month + '-' + day;
- };
+};
 
 
- /**
- * 待检测的值，
- * @param {*} value
- */
+/**
+* 待检测的值，
+* @param {*} value
+*/
 export const validDomin = (value) => {
     console.log('----')
     // let e = /^[\u4E00-\u9FA5|a-zA-Z][\w\u4E00-\u9FA5|0-9a-zA-Z]*$/;
@@ -185,4 +185,36 @@ export const validAccount = (value) => {
     let e = /^[A-Za-z0-9]+$/
     // let e = /^[^\u4e00-\u9fa5]+$/
     return e.test(value)
+}
+
+
+export const isJSON = (value) => {
+    try {
+        JSON.parse(value);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+
+export const convertJSONArr2ObjectArr = (arr) => {
+    let list = [];
+    arr.forEach(ele => {
+        if (ele[ele.length - 1] === '}') {
+            if (isJSON(ele)) {
+                list.push(JSON.parse(ele))
+            } else {
+                list.push({ ele })
+            }
+        } else {
+            if (isJSON(ele + '}')) {
+                list.push(JSON.parse(ele + '}'))
+            } else {
+                list.push({ ele })
+            }
+        }
+
+    })
+    return list;
 }

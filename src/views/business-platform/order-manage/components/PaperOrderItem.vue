@@ -1,7 +1,7 @@
 <template>
   <div class="l-tab-item-container">
     <div class="l-tab-table-container">
-      <el-table height="100%" :data="list" border style="width: 100%;">
+      <el-table height="100%" :data="list" v-loading="tableLoading" border style="width: 100%;">
         <el-table-column
           prop="order_number"
           label="订单编号"
@@ -100,13 +100,19 @@
               class="url-link"
               title="点击打开"
             >
-              http://www.<span style="color: #f00;">{{
+              http://www.<span style="color: #f00;" v-if="scope.row.secondary_domain">{{
                 scope.row.secondary_domain
-              }}</span
-              >.lwcc.net
+              }}.</span
+              >lwcc.net
             </p>
           </template>
         </el-table-column>
+        <el-table-column
+          prop="channel_name"
+          label="下单系统"
+          align="center"
+          width="120"
+        />
       </el-table>
     </div>
     <div class="l-page-jumper l-flex-row-start">
@@ -139,7 +145,7 @@ export default {
       total: 0,
       list: [],
       page: 1,
-      loading: true,
+      tableLoading: true,
     };
   },
   created() {
@@ -160,7 +166,7 @@ export default {
     },
 
     getListByPage(current_page) {
-      this.loading = true;
+      this.tableLoading = true;
       api
         .get(paperOrderListApi, {
           params: {
@@ -170,12 +176,12 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.loading = false;
+          this.tableLoading = false;
           this.total = res.data.count;
           this.list = res.data.list;
         })
         .catch((err) => {
-          this.loading = false;
+          this.tableLoading = false;
           console.log(err);
         });
     },

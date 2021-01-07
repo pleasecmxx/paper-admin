@@ -83,7 +83,7 @@ export default {
           this.dataLoading = false;
           console.log("可提现金额", res);
           if (res.code === 200) {
-            // this.cashOrignNumber =
+            this.cashOrignNumber = res.data.cumulative_commission;
             this.cashNumber = Number(res.data.cumulative_commission).toFixed(2);
           } else {
             this.$message.error(res.msg);

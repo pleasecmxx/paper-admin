@@ -73,7 +73,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="文献库" align="center" width="140">
+          <el-table-column label="文献库" align="center" width="240">
             <template slot-scope="scope">
               <div class="table-max-text-area">
                 <p>{{ scope.row.literature_library }}</p>
@@ -82,14 +82,14 @@
           </el-table-column>
           <el-table-column label="代理佣金" align="center" width="96">
             <template slot-scope="scope">
-              <p v-if="scope.row.franchise_channel_class === 1">{{ scope.row.agency_commission }}%</p>
-              <p v-if="scope.row.franchise_channel_class === 2">{{ scope.row.agency_commission_price }}元</p>
+              <p v-if="scope.row.commission_type === 1">{{ scope.row.agency_commission }}%</p>
+              <p v-if="scope.row.commission_type === 2">{{ scope.row.agency_commission_price }}元</p>
             </template>
           </el-table-column>
           <el-table-column label="店铺佣金" align="center" width="96">
             <template slot-scope="scope">
-              <p v-if="scope.row.franchise_channel_class === 1">{{ scope.row.shop_commission }}%</p>
-              <p v-if="scope.row.franchise_channel_class === 2">{{ scope.row.shop_commission_price }}元</p>
+              <p v-if="scope.row.commission_type === 1">{{ scope.row.shop_commission }}%</p>
+              <p v-if="scope.row.commission_type === 2">{{ scope.row.shop_commission_price }}元</p>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="操作" align="center" width="180">
@@ -125,7 +125,7 @@
       </div>
     </div>
     <el-dialog
-      title="配置加盟渠道"
+      title="配置加盟渠道 - 基础配置"
       :visible.sync="dialogShow"
       :width="isPc ? '65%' : '96%'"
       :top="'5vh'"
@@ -180,7 +180,7 @@ export default {
     getListByPage(current_page) {
       this.loading = true;
       let params = {
-        page: 1,
+        page: current_page,
       };
       api
         .get(channelList, {

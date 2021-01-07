@@ -184,8 +184,8 @@
         maxlength="72"
       />
     </div>
-    <div class="l-dialog-row l-flex-row-start">
-      <div class="l-dialog-half-row l-flex-row-start">
+    <div class="l-dialog-row l-flex-row-start wenxian-height-auto">
+      <div class="l-dialog-half-row l-flex-row-start wenxian-height-auto">
         <p class="min-width-text5">文献库</p>
         <el-select
           v-model="literature_library"
@@ -217,15 +217,31 @@
     </div>
     <div class="l-dialog-option-footer">
       <el-button @click="cancelDialog">取 消</el-button>
-      <el-button @click="confirmAdd" type="primary" :loading="addLoading"
-        >确 认</el-button
+      <el-button @click="onPressNext" type="primary" :loading="addLoading"
+        >下一步</el-button
       >
     </div>
+    <el-dialog
+      title="配置加盟渠道 - 产品介绍配置"
+      :visible.sync="dialogShow"
+      :width="isPc ? '65%' : '96%'"
+      :top="'5vh'"
+      destroy-on-close
+      append-to-body
+    >
+      <add-join-way-desc-dialog
+        ref="addDialogRef"
+        :isEdit="isEdit"
+        :editData="editData"
+        :closeDialog="closeDescDialog"
+        @finish="onAddFinish"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { isEmpty } from "../../../../util";
+import { isEmpty, isPC } from "../../../../util";
 import {
   comon_image_uploader,
   addChannel,
@@ -233,6 +249,7 @@ import {
 } from "./../../../../api/admin-api";
 import store from "@/store/index";
 import api from "../../../../api";
+import AddJoinWayDescDialog from "./AddJoinWayDescDialog";
 
 export default {
   name: "AddJoinWayDialog",
@@ -242,8 +259,13 @@ export default {
       default: null,
     },
   },
+  components: {
+    "add-join-way-desc-dialog": AddJoinWayDescDialog,
+  },
   data() {
     return {
+      isPc: isPC(),
+      dialogShow: false,
       imageUrl: "",
       uploaderFileUrl: process.env.VUE_APP_API_ROOT + comon_image_uploader,
       uploaderFileExtraParams: {
@@ -280,10 +302,10 @@ export default {
           value: "article",
           label: "按篇",
         },
-        {
-          value: "page",
-          label: "按页",
-        },
+        // {
+        //   value: "page",
+        //   label: "按页",
+        // },
       ],
       dispatchMethodOptions: [
         {
@@ -339,6 +361,15 @@ export default {
     },
   },
   methods: {
+    closeDescDialog() {
+      this.dialogShow = false;
+    },
+
+    onAddFinish(data) {
+      console.log("接收到的二级参数", data);
+      this.confirmAdd(data);
+    },
+
     setEditData(data) {
       console.log("编辑数据", data);
       this.isEdit = true;
@@ -347,14 +378,18 @@ export default {
       this.tag = data.tag;
       this.billing_method = data.billing_method;
       this.init_sales = data.init_sales;
-      // this.literature_library = data.literature_library;
+      this.literature_library = data.literature_library.split(',');
+      this.code  = data.code;
       this.logo = data.logo;
       this.price = data.price;
       this.desc = data.desc;
-      this.agency_commission = data.agency_commission;
+      this.agency_commission = data.agency_commission;   //两种分佣方式数据都回显上去
+      this.agency_commission_price = data.agency_commission_price;
+      this.shop_commission_price = data.shop_commission_price;
       this.shop_commission = data.shop_commission;
       this.imageUrl = data.logo;
       this.franchise_channel_class = data.franchise_channel_class;
+      this.dispatchMethod = data.commission_type;
     },
     onUploaderSuccess(e) {
       if (e.code === 200) {
@@ -379,7 +414,53 @@ export default {
       this.closeDialog();
     },
 
-    confirmAdd() {
+    onPressNext() {
+      if (isEmpty(this.name)) {
+        return this.$message.error("请输入系统名称");
+      }
+      if (isEmpty(this.tag)) {
+        return this.$message.error("请输入系统标签");
+      }
+      if (isEmpty(this.price)) {
+        return this.$message.error("请设置价格");
+      }
+      if (this.dispatchMethod === 1) {
+        if (isEmpty(this.agency_commission)) {
+          return this.$message.error("请设置代理佣金占比");
+        }
+        if (isEmpty(this.shop_commission)) {
+          return this.$message.error("请设置店铺佣金占比");
+        }
+      } else {
+        if (isEmpty(this.agency_commission_price)) {
+          return this.$message.error("请设置代理固定佣金");
+        }
+        if (isEmpty(this.shop_commission_price)) {
+          return this.$message.error("请设置店铺固定佣金");
+        }
+      }
+      if (isEmpty(this.desc)) {
+        return this.$message.error("请输入系统描述文字");
+      }
+      if (isEmpty(this.logo)) {
+        return this.$message.error("请先上传图片");
+      }
+      if (isEmpty(this.franchise_channel_class)) {
+        return this.$message.error("请选择渠道分类");
+      }
+      if (isEmpty(this.code)) {
+        return this.$message.error("请设定产品代码");
+      }
+      if (
+        isEmpty(this.literature_library) ||
+        this.literature_library.length === 0
+      ) {
+        return this.$message.error("请输入系统文献库");
+      }
+      this.dialogShow = true;
+    },
+
+    confirmAdd(params) {
       let _this = this;
       if (isEmpty(this.name)) {
         return this.$message.error("请输入系统名称");
@@ -435,8 +516,12 @@ export default {
         desc: this.desc,
         literature_library: this.literature_library.toString(),
         commission_type: this.dispatchMethod,
-        code: this.code
+        code: this.code,
       };
+      data.details  = JSON.stringify(params.details);
+      data.demo_report = JSON.stringify(params.demo_report);
+      data.question = JSON.stringify(params.question);
+      data.uploader_methods = params.uploader_method;
       if (this.dispatchMethod === 1) {
         data.agency_commission = this.agency_commission;
         data.shop_commission = this.shop_commission;
@@ -529,5 +614,10 @@ export default {
     text-align: right;
 
     /* background-color: red; */
+}
+.wenxian-height-auto {
+    height: auto !important;
+    max-height: 400px !important;
+    overflow-y: auto;
 }
 </style>
