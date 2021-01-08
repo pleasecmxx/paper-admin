@@ -11,15 +11,15 @@ export default {
         icon: 'el-icon-user'
     },
     children: [
-        {
-            path: 'normal-user',
-            name: '用户管理',
-            component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/user-manage/UserManage'),
-            meta: {
-                title: '用户管理',
-                auth: ['platform.browse','admin']
-            }
-        },
+        // {
+        //     path: 'normal-user',
+        //     name: '用户管理',
+        //     component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/user-manage/UserManage'),
+        //     meta: {
+        //         title: '用户管理',
+        //         auth: ['platform.browse','admin']
+        //     }
+        // },
         {
             path: 'shop-manage',
             name: '店铺管理',
