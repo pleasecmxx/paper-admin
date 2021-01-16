@@ -4,76 +4,53 @@
       <div class="search-row l-flex-row-start">
         <el-input
           class="l-search-input"
-          v-model="userName"
-          placeholder="请输入问答文章标题"
+          v-model="searchKeywords"
+          placeholder="请输入模版标题关键字"
+          clearable
         />
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" @click="search" icon="el-icon-search"
+          >搜索</el-button
+        >
         <el-button type="success" @click="dialogShow = true" icon="el-icon-plus"
           >添加</el-button
         >
       </div>
       <div class="l-table-content">
-        <el-table :data="list" height="100%" border style="width: 100%;" v-loading="loading">
-          <el-table-column prop="id" label="ID" width="96" align="center">
-          </el-table-column>
-          <el-table-column label="文章分类" align="center" width="180">
+        <el-table
+          :data="list"
+          height="100%"
+          border
+          style="width: 100%;"
+          v-loading="loading"
+        >
+          <el-table-column prop="id" width="96" align="center">
             <template slot-scope="scope">
-              <p style="color: #333;" v-if="scope.row.type == 1">
-                #论文查重技巧#
-              </p>
-              <p style="color: #333;" v-if="scope.row.type == 2">
-                #论文常见问题#
-              </p>
-              <p style="color: #333;" v-if="scope.row.type == 3">
-                #论文行业资讯#
-              </p>
-              <p style="color: #333;" v-if="scope.row.type == 4">
-                #论文知识普及#
-              </p>
+              <span>{{ scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="文章封面" align="center" width="180">
+          <el-table-column prop="id" label="ID" width="96" align="center">
+          </el-table-column>
+          <el-table-column label="模版底版" align="center" width="280">
             <template slot-scope="scope">
               <el-image
                 class="user-table-logo-img"
-                :src="
-                  scope.row.cover_photo ? scope.row.cover_photo : 'https://'
-                "
-                :preview-src-list="
-                  scope.row.cover_photo ? [scope.row.cover_photo] : []
-                "
+                fit="contain"
+                :src="scope.row.file ? scope.row.file : 'https://'"
+                :preview-src-list="scope.row.file ? [scope.row.file] : []"
               >
               </el-image>
             </template>
           </el-table-column>
-          <el-table-column prop="title" label="文章标题" align="center">
-          </el-table-column>
-          <el-table-column label="最近编辑人" width="96" align="center">
-            admin
-          </el-table-column>
-          <el-table-column label="创建时间" align="center" width="180">
-            <template slot-scope="scope">
-              <p>{{scope.row.create_time}}</p>
-            </template>
-          </el-table-column>
-          <el-table-column label="状态" width="96" align="center">
-            启用
+          <el-table-column prop="title" label="模版标题" align="center">
           </el-table-column>
           <el-table-column prop="name" label="操作" align="center" width="180">
             <template slot-scope="scope">
               <el-button
-                @click.native.prevent="showPreviewDialog(scope.row)"
+                @click.native.prevent="showDetailsDialog(scope.row)"
                 type="text"
                 size="small"
               >
                 预览
-              </el-button>
-              <el-button
-                @click.native.prevent="showDetailsDialog(scope.$index)"
-                type="text"
-                size="small"
-              >
-                编辑
               </el-button>
               <el-button
                 @click.native.prevent="deleteArticle(scope.row)"
@@ -99,33 +76,33 @@
       </div>
     </div>
     <el-dialog
-      title="添加文章"
+      title="添加推广模版"
       top="8vh"
       :visible.sync="dialogShow"
-      :width="isPc ? '78%' : '96%'"
+      :width="isPc ? '800px' : '96%'"
       :append-to-body="true"
       destroy-on-close
       :close="onDialogClose"
       v-if="refreshKit"
     >
-      <add-solution-dialog
+      <add-qr-code-template-dialog
         :closeDialog="closeDialog"
         v-if="refreshKit"
         @finish="onAddFinish"
       />
     </el-dialog>
     <el-dialog
-      title="预览文章"
+      title="添加推广模版"
       top="8vh"
-      :visible.sync="preViewDialogShow"
-      :width="isPc ? '60%' : '96%'"
+      :visible.sync="dialogShow1"
+      :width="isPc ? '620px' : '96%'"
       :append-to-body="true"
       destroy-on-close
       v-if="refreshKit"
     >
-      <preview-solution
-        ref="previewSolutionRef"
-        :closeDialog="closePreViewDialog"
+      <pre-viewer-qr-code-dialog
+        ref="previewer-dialog-ref"
+        :closeDialog="closeDialog1"
         v-if="refreshKit"
       />
     </el-dialog>
@@ -134,46 +111,61 @@
 
 <script>
 import api from "../../../api";
-import { deleteSolution, solutionList } from "../../../api/admin-api";
+import {
+  deleteSolution,
+  materialList,
+  qr_code_template_list,
+  solutionList,
+} from "../../../api/admin-api";
 import { isPC } from "./../../../util/index";
-import AddSolutionDialog from "./dialog/AddSolutionDialog";
-import PreViewSolution from "./dialog/PreViewSolution";
+import AddQRCodeTemplate from "./dialog/AddQRCodeTemplate";
+import PreViewerQRCodeDialog from "./dialog/PreViewerQRCodeDialog";
+
 export default {
-  name: "SolutionManage",
+  name: "MaterialManage",
   components: {
-    "add-solution-dialog": AddSolutionDialog,
-    "preview-solution": PreViewSolution,
+    "add-qr-code-template-dialog": AddQRCodeTemplate,
+    "pre-viewer-qr-code-dialog": PreViewerQRCodeDialog,
   },
   data() {
     return {
       isPc: isPC(),
       userName: "",
       dialogShow: false,
+      dialogShow1: false,
       preViewDialogShow: false,
       refreshKit: true,
       total: 0,
       list: [],
       page: 1,
       loading: true,
+      isInSearch: false,
+      searchKeywords: "",
     };
   },
   watch: {
-      dialogShow: function(val,_){
-            if(!val){
-                this.refreshKit = false;
-                this.$nextTick(() => {
-                    this.refreshKit = true;
-                })
-            }
-      },
-      preViewDialogShow: function(val,_){
-            if(!val){
-                this.refreshKit = false;
-                this.$nextTick(() => {
-                    this.refreshKit = true;
-                })
-            }
+    dialogShow: function (val, _) {
+      if (!val) {
+        this.refreshKit = false;
+        this.$nextTick(() => {
+          this.refreshKit = true;
+        });
       }
+    },
+    preViewDialogShow: function (val, _) {
+      if (!val) {
+        this.refreshKit = false;
+        this.$nextTick(() => {
+          this.refreshKit = true;
+        });
+      }
+    },
+    searchKeywords: function (val, _) {
+      if (val.length === 0 && this.isInSearch) {
+        this.isInSearch = false;
+        this.getListByPage(1);
+      }
+    },
   },
   created() {
     this.getListByPage(1);
@@ -185,6 +177,7 @@ export default {
       this.page;
       this.getListByPage(page);
     },
+
     onAddFinish() {
       this.getListByPage(this.page);
     },
@@ -192,13 +185,13 @@ export default {
     getListByPage(current_page) {
       this.loading = true;
       api
-        .get(solutionList, {
+        .get(qr_code_template_list, {
           params: {
             page: current_page,
           },
         })
         .then((res) => {
-          console.log(res);
+          console.log("模版列表", res);
           this.loading = false;
           this.total = res.data.count;
           this.list = res.data.list;
@@ -217,7 +210,40 @@ export default {
       });
     },
 
-    showDetailsDialog() {},
+    search() {
+      this.page = 1;
+      this.$nextTick(() => {
+        let params = {
+          title: this.searchKeywords,
+          page: this.page,
+        };
+        this.loading = true;
+        api
+          .get(qr_code_template_list, {
+            params: params,
+          })
+          .then((res) => {
+            console.log(res);
+            this.loading = false;
+            this.total = res.data.count;
+            this.list = res.data.list;
+            this.isInSearch = true;
+          })
+          .catch((err) => {
+            this.loading = false;
+            console.log(err);
+          });
+      });
+    },
+
+    showDetailsDialog(row) {
+        this.dialogShow1 = true;
+        this.$nextTick(() => {
+            this.$refs['previewer-dialog-ref'].setEditData(row)
+        })
+
+    },
+
     //删除问答文章
     deleteArticle(row) {
       this.$confirm("此操作将永久删除此项, 是否继续?", "提示", {
@@ -259,12 +285,15 @@ export default {
       this.onDialogClose();
     },
 
+    closeDialog1() {
+      this.dialogShow1 = false;
+    },
+
     closePreViewDialog(row, index) {
       this.preViewDialogShow = false;
     },
 
-    onDialogClose() {
-    },
+    onDialogClose() {},
   },
 };
 </script>

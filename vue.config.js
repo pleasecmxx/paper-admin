@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const spritesmithPlugin = require('webpack-spritesmith')
 const terserPlugin = require('terser-webpack-plugin')
+// const CompressionPlugin = require('compression-webpack-plugin')
 const cdnDependencies = require('./dependencies.cdn')
 
 const spritesmithTasks = []
@@ -48,6 +49,11 @@ const cdn = {
     css: cdnDependencies.map(e => e.css).filter(e => e),
     js: cdnDependencies.map(e => e.js).filter(e => e)
 }
+// gzip 相关
+const isGZIP = process.env.VUE_APP_GZIP == 'ON'
+
+const Timestamp = new Date().getTime();
+const systrem_version = '1.0.8'
 
 module.exports = {
     publicPath: '',
@@ -55,43 +61,74 @@ module.exports = {
     devServer: {
         open: true,
         proxy: {
-            '/': {
-                target: process.env.VUE_APP_API_ROOT,
-                changeOrigin: true
+            '/': {    // search为转发路径
+                target: process.env.VUE_APP_API_ROOT,  // 目标地址
+                // target: 'https://admin-api.haitunshenghuo.com',  // 目标地址
+                secure: false,  // 如果是https接口，需要配置这个参数
+                ws: true, // 是否代理websockets
+                changeOrigin: true   // 设置同源  默认false，是否需要改变原始主机头为目标URL,
             }
-        },
-        // 用于 mock-server
-        // proxy: {
-        //     '/mock': {
-        //         target: '/',
-        //         changeOrigin: true
-        //     },
-        //     '/': {
-        //         target: process.env.VUE_APP_API_ROOT,
-        //         changeOrigin: true
-        //     }
-        // },
+        }
     },
-    configureWebpack: config => {
-        config.resolve.modules = ['node_modules', 'assets/sprites']
-        config.plugins.push(...spritesmithTasks)
-        if (isCDN) {
-            config.externals = externals
-        }
-        config.optimization = {
-            minimizer: [
-                new terserPlugin({
-                    terserOptions: {
-                        compress: {
-                            warnings: false,
-                            drop_console: true,
-                            drop_debugger: true,
-                            pure_funcs: ['console.log']
-                        }
-                    }
-                })
-            ]
-        }
+    // devServer: {
+    //     open: true
+    //     // proxy: {
+    //     //     '/': {
+    //     //         target: process.env.VUE_APP_API_ROOT,
+    //     //         changeOrigin: true
+    //     //     }
+    //     // },
+    //     // 用于 mock-server
+    //     // proxy: {
+    //     //     '/mock': {
+    //     //         target: '/',
+    //     //         changeOrigin: true
+    //     //     },
+    //     //     '/': {
+    //     //         target: process.env.VUE_APP_API_ROOT,
+    //     //         changeOrigin: true
+    //     //     }
+    //     // },
+    // },
+    // configureWebpack: config => {
+    //     config.resolve.modules = ['node_modules', 'assets/sprites']
+    //     config.plugins.push(...spritesmithTasks)
+    //     if (isCDN) {
+    //         config.externals = externals
+    //     }
+    //     config.optimization = {
+    //         minimizer: [
+    //             new terserPlugin({
+    //                 terserOptions: {
+    //                     compress: {
+    //                         warnings: false,
+    //                         drop_console: true,
+    //                         drop_debugger: true,
+    //                         pure_funcs: ['console.log']
+    //                     }
+    //                 }
+    //             })
+    //         ]
+    //     }
+    //     if (isGZIP) {
+    //         return {
+    //             plugins: [
+    //                 new CompressionPlugin({
+    //                     algorithm: 'gzip',
+    //                     test: /\.(js|css)$/, // 匹配文件名
+    //                     threshold: 10240, // 对超过10k的数据压缩
+    //                     deleteOriginalAssets: false, // 不删除源文件
+    //                     minRatio: 0.8 // 压缩比
+    //                 })
+    //             ]
+    //         }
+    //     }
+    // },
+    configureWebpack: { // webpack 配置
+        output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+            filename: `[name].${systrem_version}.${Timestamp}.js`,
+            chunkFilename: `[name].${systrem_version}.${Timestamp}.js`
+        },
     },
     pluginOptions: {
         lintStyleOnBuild: true,
@@ -148,6 +185,6 @@ module.exports = {
             .type('javascript/auto')
             .use('i18n')
             .loader('@kazupon/vue-i18n-loader')
-            .end();
+            .end()
     }
 }

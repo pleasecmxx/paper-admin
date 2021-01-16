@@ -51,3 +51,39 @@
 [![star](https://img.shields.io/github/stars/hooray/fantastic-admin?style=social)](https://github.com/hooray/fantastic-admin/stargazers)
 
 [![star](https://gitee.com/hooray/fantastic-admin/badge/star.svg?theme=dark)](https://gitee.com/hooray/fantastic-admin/stargazers)
+
+
+qr_code: {   //必填
+    top_intent: number,
+    left_intent: number
+}
+
+link_text: {   //非必填
+    top_intent: number,
+    font_size: number,
+    color: "",
+}
+
+
+
+
+
+### C端更新
+1、完成合作高校15张图片换成自己服务器的地址
+2、完成主题风格更换
+3、完成网站备案图标更改（固定不变的）
+4、完成轮播图（活动跳转功能，可自由配置）
+5、完成人工降重界面文字调整
+6、完成主页三个图标的替换
+7、修复主页问答标题显示不全的问题
+8、调整渠道上下栏目对齐的问题
+9、优化二级域名查找代码、支持不输入www跳入
+
+### 管理端更新
+1、每次版本更新自动更新缓存、未检测到新版本使用缓存
+2、渠道配置中 code改为选择框选择、因为填写错误就会导致该渠道订单支付成功但无查重进度
+3、增加模块【系统管理】-【素材库管理】方便写作、网站内容日常维护
+4、修复问答写作弹窗第二次打开不可输入的问题
+5、轮播图增加搜索功能、轮播图增加编辑功能、增加【跳转链接】字段、配置了则客户端点击即跳转该链接。
+6、去掉二级域名www显示
+7、增加每次切换菜单自动更新一遍数据的功能。以前是只切换，刷新需要点击页面中刷新按钮。

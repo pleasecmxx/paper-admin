@@ -44,7 +44,7 @@
             </div>
             <el-dropdown-menu slot="dropdown" class="user-dropdown">
                 <el-dropdown-item v-if="$store.state.settings.enableDashboard" command="dashboard">{{ $t('route.dashboard') }}</el-dropdown-item>
-                <el-dropdown-item command="setting">{{ $t('app.profile') }}</el-dropdown-item>
+                <!-- <el-dropdown-item command="setting">{{ $t('app.profile') }}</el-dropdown-item> -->
                 <el-dropdown-item divided command="logout">{{ $t('app.logout') }}</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>

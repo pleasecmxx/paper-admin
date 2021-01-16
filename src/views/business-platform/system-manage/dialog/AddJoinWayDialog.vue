@@ -207,12 +207,25 @@
       </div>
       <div class="l-dialog-half-row l-flex-row-start">
         <p class="min-width-text5">产品CODE</p>
-        <el-input
+        <!-- <el-input
           class="l-dialog-input"
           type="text"
           v-model="code"
           placeholder="请设定产品代码"
-        />
+        /> -->
+        <el-select
+          v-model="code"
+          placeholder="请选择产品代码"
+          style="width: 100%;"
+        >
+          <el-option
+            v-for="item in productCodeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </div>
     </div>
     <div class="l-dialog-option-footer">
@@ -341,6 +354,32 @@ export default {
           label: ".docx",
         },
       ],
+      productCodeOptions: [
+        {
+          value: "PaperOk",
+          label: "PaperOk论文查重 PaperOk",
+        },
+        {
+          value: "PaperKey",
+          label: "PaperKey论文查重 PaperKey",
+        },
+        {
+          value: "Paperright",
+          label: "PaperRight论文 Paperright",
+        },
+        {
+          value: "Writecheck",
+          label: "WriteCheck论文查重 Writecheck",
+        },
+        {
+          value: "wanfangbk",
+          label: "万方查重本科版 wanfangbk",
+        },
+        {
+          value: "wanfangsb",
+          label: "万方查重硕博版 wanfangsb",
+        },
+      ],
       editData: null,
       isEdit: false,
     };
@@ -378,12 +417,12 @@ export default {
       this.tag = data.tag;
       this.billing_method = data.billing_method;
       this.init_sales = data.init_sales;
-      this.literature_library = data.literature_library.split(',');
-      this.code  = data.code;
+      this.literature_library = data.literature_library.split(",");
+      this.code = data.code;
       this.logo = data.logo;
       this.price = data.price;
       this.desc = data.desc;
-      this.agency_commission = data.agency_commission;   //两种分佣方式数据都回显上去
+      this.agency_commission = data.agency_commission; //两种分佣方式数据都回显上去
       this.agency_commission_price = data.agency_commission_price;
       this.shop_commission_price = data.shop_commission_price;
       this.shop_commission = data.shop_commission;
@@ -518,7 +557,7 @@ export default {
         commission_type: this.dispatchMethod,
         code: this.code,
       };
-      data.details  = JSON.stringify(params.details);
+      data.details = JSON.stringify(params.details);
       data.demo_report = JSON.stringify(params.demo_report);
       data.question = JSON.stringify(params.question);
       data.uploader_methods = params.uploader_method;

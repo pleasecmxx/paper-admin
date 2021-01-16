@@ -4,77 +4,64 @@
       <div class="search-row l-flex-row-start">
         <el-input
           class="l-search-input"
-          v-model="userName"
-          placeholder="请输入问答文章标题"
+          v-model="searchKeywords"
+          placeholder="请输入素材标题关键字"
+          clearable
         />
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button type="primary" @click="search" icon="el-icon-search"
+          >搜索</el-button
+        >
         <el-button type="success" @click="dialogShow = true" icon="el-icon-plus"
           >添加</el-button
         >
       </div>
       <div class="l-table-content">
-        <el-table :data="list" height="100%" border style="width: 100%;" v-loading="loading">
-          <el-table-column prop="id" label="ID" width="96" align="center">
-          </el-table-column>
-          <el-table-column label="文章分类" align="center" width="180">
+        <el-table
+          :data="list"
+          height="100%"
+          border
+          style="width: 100%;"
+          v-loading="loading"
+        >
+          <el-table-column prop="id" width="96" align="center">
             <template slot-scope="scope">
-              <p style="color: #333;" v-if="scope.row.type == 1">
-                #论文查重技巧#
-              </p>
-              <p style="color: #333;" v-if="scope.row.type == 2">
-                #论文常见问题#
-              </p>
-              <p style="color: #333;" v-if="scope.row.type == 3">
-                #论文行业资讯#
-              </p>
-              <p style="color: #333;" v-if="scope.row.type == 4">
-                #论文知识普及#
-              </p>
+              <span>{{ scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="文章封面" align="center" width="180">
+          <el-table-column prop="id" label="ID" width="96" align="center">
+          </el-table-column>
+          <el-table-column label="素材展示" align="center" width="280">
             <template slot-scope="scope">
               <el-image
                 class="user-table-logo-img"
-                :src="
-                  scope.row.cover_photo ? scope.row.cover_photo : 'https://'
-                "
-                :preview-src-list="
-                  scope.row.cover_photo ? [scope.row.cover_photo] : []
-                "
+                fit="contain"
+                :src="scope.row.file ? scope.row.file : 'https://'"
+                :preview-src-list="scope.row.file ? [scope.row.file] : []"
               >
               </el-image>
             </template>
           </el-table-column>
-          <el-table-column prop="title" label="文章标题" align="center">
-          </el-table-column>
-          <el-table-column label="最近编辑人" width="96" align="center">
-            admin
-          </el-table-column>
-          <el-table-column label="创建时间" align="center" width="180">
+          <el-table-column label="素材标题" align="center" width="320">
             <template slot-scope="scope">
-              <p>{{scope.row.create_time}}</p>
+              <el-link class="url-link">{{ scope.row.file }}</el-link>
             </template>
           </el-table-column>
-          <el-table-column label="状态" width="96" align="center">
-            启用
+          <el-table-column
+            prop="title"
+            label="素材标题"
+            align="center"
+            width="180"
+          >
           </el-table-column>
           <el-table-column prop="name" label="操作" align="center" width="180">
             <template slot-scope="scope">
-              <el-button
-                @click.native.prevent="showPreviewDialog(scope.row)"
-                type="text"
-                size="small"
-              >
-                预览
-              </el-button>
-              <el-button
+              <!-- <el-button
                 @click.native.prevent="showDetailsDialog(scope.$index)"
                 type="text"
                 size="small"
               >
                 编辑
-              </el-button>
+              </el-button> -->
               <el-button
                 @click.native.prevent="deleteArticle(scope.row)"
                 type="text"
@@ -99,34 +86,19 @@
       </div>
     </div>
     <el-dialog
-      title="添加文章"
+      title="添加素材"
       top="8vh"
       :visible.sync="dialogShow"
-      :width="isPc ? '78%' : '96%'"
+      :width="isPc ? '60%' : '96%'"
       :append-to-body="true"
       destroy-on-close
       :close="onDialogClose"
       v-if="refreshKit"
     >
-      <add-solution-dialog
+      <add-material-dialog
         :closeDialog="closeDialog"
         v-if="refreshKit"
         @finish="onAddFinish"
-      />
-    </el-dialog>
-    <el-dialog
-      title="预览文章"
-      top="8vh"
-      :visible.sync="preViewDialogShow"
-      :width="isPc ? '60%' : '96%'"
-      :append-to-body="true"
-      destroy-on-close
-      v-if="refreshKit"
-    >
-      <preview-solution
-        ref="previewSolutionRef"
-        :closeDialog="closePreViewDialog"
-        v-if="refreshKit"
       />
     </el-dialog>
   </div>
@@ -134,15 +106,19 @@
 
 <script>
 import api from "../../../api";
-import { deleteSolution, solutionList } from "../../../api/admin-api";
+import {
+  deleteSolution,
+  materialList,
+  solutionList,
+  deleteMaterial
+} from "../../../api/admin-api";
 import { isPC } from "./../../../util/index";
-import AddSolutionDialog from "./dialog/AddSolutionDialog";
-import PreViewSolution from "./dialog/PreViewSolution";
+import AddMaterialDialog from "./dialog/AddMaterialDialog";
+
 export default {
-  name: "SolutionManage",
+  name: "MaterialManage",
   components: {
-    "add-solution-dialog": AddSolutionDialog,
-    "preview-solution": PreViewSolution,
+    "add-material-dialog": AddMaterialDialog,
   },
   data() {
     return {
@@ -155,25 +131,33 @@ export default {
       list: [],
       page: 1,
       loading: true,
+      isInSearch: false,
+      searchKeywords: "",
     };
   },
   watch: {
-      dialogShow: function(val,_){
-            if(!val){
-                this.refreshKit = false;
-                this.$nextTick(() => {
-                    this.refreshKit = true;
-                })
-            }
-      },
-      preViewDialogShow: function(val,_){
-            if(!val){
-                this.refreshKit = false;
-                this.$nextTick(() => {
-                    this.refreshKit = true;
-                })
-            }
+    dialogShow: function (val, _) {
+      if (!val) {
+        this.refreshKit = false;
+        this.$nextTick(() => {
+          this.refreshKit = true;
+        });
       }
+    },
+    preViewDialogShow: function (val, _) {
+      if (!val) {
+        this.refreshKit = false;
+        this.$nextTick(() => {
+          this.refreshKit = true;
+        });
+      }
+    },
+    searchKeywords: function (val, _) {
+      if (val.length === 0 && this.isInSearch) {
+        this.isInSearch = false;
+        this.getListByPage(1);
+      }
+    },
   },
   created() {
     this.getListByPage(1);
@@ -182,9 +166,10 @@ export default {
   methods: {
     currentPageChange(page) {
       console.log(page);
-      this.page;
+      this.page = page;
       this.getListByPage(page);
     },
+
     onAddFinish() {
       this.getListByPage(this.page);
     },
@@ -192,7 +177,7 @@ export default {
     getListByPage(current_page) {
       this.loading = true;
       api
-        .get(solutionList, {
+        .get(materialList, {
           params: {
             page: current_page,
           },
@@ -217,6 +202,32 @@ export default {
       });
     },
 
+    search() {
+      this.page = 1;
+      this.$nextTick(() => {
+        let params = {
+          title: this.searchKeywords,
+          page: this.page,
+        };
+        this.loading = true;
+        api
+          .get(materialList, {
+            params: params,
+          })
+          .then((res) => {
+            console.log(res);
+            this.loading = false;
+            this.total = res.data.count;
+            this.list = res.data.list;
+            this.isInSearch = true;
+          })
+          .catch((err) => {
+            this.loading = false;
+            console.log(err);
+          });
+      });
+    },
+
     showDetailsDialog() {},
     //删除问答文章
     deleteArticle(row) {
@@ -230,13 +241,14 @@ export default {
             id: row.id,
           };
           api
-            .post(deleteSolution, params)
+            .post(deleteMaterial, params)
             .then((res) => {
               if (res.code == 200) {
                 this.$message({
                   type: "success",
                   message: "删除成功!",
                 });
+                this.onAddFinish();
               } else {
                 this.$message({
                   type: "error",
@@ -263,8 +275,7 @@ export default {
       this.preViewDialogShow = false;
     },
 
-    onDialogClose() {
-    },
+    onDialogClose() {},
   },
 };
 </script>

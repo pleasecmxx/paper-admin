@@ -1,227 +1,299 @@
 <template>
-    <div class="layout">
-        <div id="app-main">
-            <transition name="header">
-                <header v-if="$store.state.settings.mode == 'pc' && $store.state.settings.showHeader">
-                    <div class="header-container">
-                        <div class="main">
-                            <Logo />
-                            <!-- 当头部导航大于 1 个的时候才会显示 -->
-                            <div v-if="$store.state.menu.routes.length > 1" class="nav">
-                                <template v-for="(item, index) in $store.state.menu.routes">
-                                    <div v-if="item.children && item.children.length !== 0" :key="index" :class="{
-                                        'item': true,
-                                        'active': index == $store.state.menu.headerActived
-                                    }" @click="switchMenu(index)"
-                                    >
-                                        <template v-if="item.meta.icon">
-                                            <i v-if="item.meta.icon.indexOf('el-icon-') === 0 || item.meta.icon.indexOf('ri-') === 0" :class="`${item.meta.icon} icon`" />
-                                            <svg-icon v-else :name="item.meta.icon" class="icon" />
-                                        </template>
-                                        <span v-if="item.meta.title">{{ item.meta.title }}</span>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                        <UserMenu />
-                    </div>
-                </header>
-            </transition>
-            <div class="wrapper">
-                <div :class="{
-                    'sidebar-container': true,
-                    'show': $store.state.settings.mode == 'mobile' && !$store.state.settings.sidebarCollapse
-                }"
-                >
-                    <transition name="main-sidebar">
-                        <div v-if="(!$store.state.settings.showHeader || $store.state.settings.mode == 'mobile') && $store.state.menu.routes.length > 1" class="main-sidebar-container">
-                            <Logo :show-title="false" class="sidebar-logo" />
-                            <div class="nav">
-                                <template v-for="(item, index) in $store.state.menu.routes">
-                                    <div v-if="item.children && item.children.length !== 0" :key="index" :class="{
-                                        'item': true,
-                                        'active': index == $store.state.menu.headerActived
-                                    }" :title="item.meta.title" @click="switchMenu(index)"
-                                    >
-                                        <template v-if="item.meta.icon">
-                                            <i v-if="item.meta.icon.indexOf('el-icon-') === 0 || item.meta.icon.indexOf('ri-') === 0" :class="`${item.meta.icon} icon`" />
-                                            <svg-icon v-else :name="item.meta.icon" class="icon" />
-                                        </template>
-                                        <span>{{ item.meta.title }}</span>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                    </transition>
-                    <div :class="{
-                        'sub-sidebar-container': true,
-                        'is-collapse': $store.state.settings.mode == 'pc' && $store.state.settings.sidebarCollapse
-                    }" @scroll="onSidebarScroll"
-                    >
-                        <Logo :show-logo="$store.state.menu.routes.length <= 1" :class="{
-                            'sidebar-logo': true,
-                            'sidebar-logo-bg': $store.state.menu.routes.length <= 1,
-                            'shadow': sidebarScrollTop
-                        }"
-                        />
-                        <el-menu unique-opened :default-active="$route.meta.activeMenu || $route.path" :collapse="$store.state.settings.mode == 'pc' && $store.state.settings.sidebarCollapse" :collapse-transition="false" :class="{
-                            'is-collapse-without-logo': $store.state.menu.routes.length > 1 && $store.state.settings.mode == 'pc' && $store.state.settings.sidebarCollapse
-                        }"
-                        >
-                            <transition-group name="sub-sidebar">
-                                <SidebarItem v-for="route in $store.getters['menu/sidebarRoutes']" :key="route.path" :item="route" :base-path="route.path" />
-                            </transition-group>
-                        </el-menu>
-                    </div>
-                </div>
-                <div :class="{
-                    'sidebar-mask': true,
-                    'show': $store.state.settings.mode == 'mobile' && !$store.state.settings.sidebarCollapse
-                }" @click="$store.commit('settings/toggleSidebarCollapse')"
-                />
-                <div class="main-container" :style="{'padding-bottom': $route.meta.paddingBottom}">
-                    <Tabbar v-if="$store.state.settings.enableTabbar" />
-                    <Breadcrumb :class="{'shadow': scrollTop}" />
-                    <div class="main">
-                        <transition name="main" mode="out-in">
-                            <keep-alive v-if="isRouterAlive" :include="$store.state.keepAlive.list">
-                                <RouterView :key="$route.path" />
-                            </keep-alive>
-                        </transition>
-                    </div>
-                    <!-- <Copyright v-if="showCopyright" /> -->
-                </div>
+  <div class="layout">
+    <div id="app-main">
+      <transition name="header">
+        <header
+          v-if="
+            $store.state.settings.mode == 'pc' &&
+            $store.state.settings.showHeader
+          "
+        >
+          <div class="header-container">
+            <div class="main">
+              <Logo />
+              <!-- 当头部导航大于 1 个的时候才会显示 -->
+              <div v-if="$store.state.menu.routes.length > 1" class="nav">
+                <template v-for="(item, index) in $store.state.menu.routes">
+                  <div
+                    v-if="item.children && item.children.length !== 0"
+                    :key="index"
+                    :class="{
+                      item: true,
+                      active: index == $store.state.menu.headerActived,
+                    }"
+                    @click="switchMenu(index)"
+                  >
+                    <template v-if="item.meta.icon">
+                      <i
+                        v-if="
+                          item.meta.icon.indexOf('el-icon-') === 0 ||
+                          item.meta.icon.indexOf('ri-') === 0
+                        "
+                        :class="`${item.meta.icon} icon`"
+                      />
+                      <svg-icon v-else :name="item.meta.icon" class="icon" />
+                    </template>
+                    <span v-if="item.meta.title">{{ item.meta.title }}</span>
+                  </div>
+                </template>
+              </div>
             </div>
-            <el-backtop :right="20" :bottom="20" title="回到顶部" />
+            <UserMenu />
+          </div>
+        </header>
+      </transition>
+      <div class="wrapper">
+        <div
+          :class="{
+            'sidebar-container': true,
+            show:
+              $store.state.settings.mode == 'mobile' &&
+              !$store.state.settings.sidebarCollapse,
+          }"
+        >
+          <transition name="main-sidebar">
+            <div
+              v-if="
+                (!$store.state.settings.showHeader ||
+                  $store.state.settings.mode == 'mobile') &&
+                $store.state.menu.routes.length > 1
+              "
+              class="main-sidebar-container"
+            >
+              <Logo :show-title="false" class="sidebar-logo" />
+              <div class="nav">
+                <template v-for="(item, index) in $store.state.menu.routes">
+                  <div
+                    v-if="item.children && item.children.length !== 0"
+                    :key="index"
+                    :class="{
+                      item: true,
+                      active: index == $store.state.menu.headerActived,
+                    }"
+                    :title="item.meta.title"
+                    @click="switchMenu(index)"
+                  >
+                    <template v-if="item.meta.icon">
+                      <i
+                        v-if="
+                          item.meta.icon.indexOf('el-icon-') === 0 ||
+                          item.meta.icon.indexOf('ri-') === 0
+                        "
+                        :class="`${item.meta.icon} icon`"
+                      />
+                      <svg-icon v-else :name="item.meta.icon" class="icon" />
+                    </template>
+                    <span>{{ item.meta.title }}</span>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </transition>
+          <div
+            :class="{
+              'sub-sidebar-container': true,
+              'is-collapse':
+                $store.state.settings.mode == 'pc' &&
+                $store.state.settings.sidebarCollapse,
+            }"
+            @scroll="onSidebarScroll"
+          >
+            <Logo
+              :show-logo="$store.state.menu.routes.length <= 1"
+              :class="{
+                'sidebar-logo': true,
+                'sidebar-logo-bg': $store.state.menu.routes.length <= 1,
+                shadow: sidebarScrollTop,
+              }"
+            />
+            <el-menu
+              unique-opened
+              :default-active="$route.meta.activeMenu || $route.path"
+              :collapse="
+                $store.state.settings.mode == 'pc' &&
+                $store.state.settings.sidebarCollapse
+              "
+              :collapse-transition="false"
+              :class="{
+                'is-collapse-without-logo':
+                  $store.state.menu.routes.length > 1 &&
+                  $store.state.settings.mode == 'pc' &&
+                  $store.state.settings.sidebarCollapse,
+              }"
+            >
+              <transition-group name="sub-sidebar">
+                <SidebarItem
+                  v-for="route in $store.getters['menu/sidebarRoutes']"
+                  :key="route.path"
+                  :item="route"
+                  :base-path="route.path"
+                />
+              </transition-group>
+            </el-menu>
+          </div>
         </div>
-        <Search />
-        <ThemeSetting />
+        <div
+          :class="{
+            'sidebar-mask': true,
+            show:
+              $store.state.settings.mode == 'mobile' &&
+              !$store.state.settings.sidebarCollapse,
+          }"
+          @click="$store.commit('settings/toggleSidebarCollapse')"
+        />
+        <div
+          class="main-container"
+          :style="{ 'padding-bottom': $route.meta.paddingBottom }"
+        >
+          <Tabbar v-if="$store.state.settings.enableTabbar" />
+          <Breadcrumb :class="{ shadow: scrollTop }" />
+          <div class="main">
+            <transition name="main" mode="out-in">
+              <!-- <keep-alive v-if="isRouterAlive" :include="$store.state.keepAlive.list"> -->
+              <RouterView :key="$route.path" />
+              <!-- </keep-alive> -->
+            </transition>
+          </div>
+          <!-- <Copyright v-if="showCopyright" /> -->
+        </div>
+      </div>
+      <el-backtop :right="20" :bottom="20" title="回到顶部" />
     </div>
+    <Search />
+    <ThemeSetting />
+  </div>
 </template>
 
 <script>
-import Logo from './components/Logo'
-import UserMenu from './components/UserMenu'
-import SidebarItem from './components/SidebarItem'
-import Search from './components/Search'
-import Tabbar from './components/Tabbar'
-import Breadcrumb from './components/Breadcrumb'
-import ThemeSetting from './components/ThemeSetting'
-import { generateI18nTitle } from '@/util'
+import Logo from "./components/Logo";
+import UserMenu from "./components/UserMenu";
+import SidebarItem from "./components/SidebarItem";
+import Search from "./components/Search";
+import Tabbar from "./components/Tabbar";
+import Breadcrumb from "./components/Breadcrumb";
+import ThemeSetting from "./components/ThemeSetting";
+import { generateI18nTitle } from "@/util";
 
 export default {
-    name: 'Layout',
-    components: {
-        Logo,
-        UserMenu,
-        SidebarItem,
-        Search,
-        Tabbar,
-        Breadcrumb,
-        ThemeSetting
+  name: "Layout",
+  components: {
+    Logo,
+    UserMenu,
+    SidebarItem,
+    Search,
+    Tabbar,
+    Breadcrumb,
+    ThemeSetting,
+  },
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
+  data() {
+    return {
+      isRouterAlive: true,
+      routePath: "",
+      sidebarScrollTop: 0,
+      scrollTop: 0,
+    };
+  },
+  computed: {
+    showCopyright() {
+      return typeof this.$route.meta.copyright !== "undefined"
+        ? this.$route.meta.copyright
+        : this.$store.state.settings.showCopyright;
     },
-    provide() {
-        return {
-            reload: this.reload
+  },
+  watch: {
+    $route: "routeChange",
+    "$store.state.settings.sidebarCollapse"(val) {
+      if (this.$store.state.settings.mode == "mobile") {
+        if (!val) {
+          document.querySelector("body").classList.add("hidden");
+        } else {
+          document.querySelector("body").classList.remove("hidden");
         }
+      }
     },
-    data() {
-        return {
-            isRouterAlive: true,
-            routePath: '',
-            sidebarScrollTop: 0,
-            scrollTop: 0
+  },
+  mounted() {
+    this.initHotkey();
+    window.addEventListener("scroll", this.onScroll);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
+  methods: {
+    generateI18nTitle,
+    reload(type = 1) {
+      if (type == 1) {
+        this.isRouterAlive = false;
+        this.$nextTick(() => (this.isRouterAlive = true));
+      } else {
+        this.$router.push({
+          name: "reload",
+        });
+      }
+    },
+    routeChange(newVal, oldVal) {
+      this.$route.meta.title &&
+        this.$store.commit(
+          "settings/setTitle",
+          this.generateI18nTitle(this.$route.meta.i18n, this.$route.meta.title)
+        );
+      if (newVal.name == oldVal.name) {
+        this.reload();
+      }
+    },
+    initHotkey() {
+      this.$hotkeys("alt+s", (e) => {
+        if (this.$store.state.settings.enableNavSearch) {
+          e.preventDefault();
+          this.$eventBus.$emit("global-search-toggle");
         }
-    },
-    computed: {
-        showCopyright() {
-            return typeof this.$route.meta.copyright !== 'undefined' ? this.$route.meta.copyright : this.$store.state.settings.showCopyright
+      });
+      this.$hotkeys("f5", (e) => {
+        if (this.$store.state.settings.enablePageReload) {
+          e.preventDefault();
+          this.reload(this.$store.state.settings.enableTabbar ? 1 : 2);
         }
+      });
     },
-    watch: {
-        $route: 'routeChange',
-        '$store.state.settings.sidebarCollapse'(val) {
-            if (this.$store.state.settings.mode == 'mobile') {
-                if (!val) {
-                    document.querySelector('body').classList.add('hidden')
-                } else {
-                    document.querySelector('body').classList.remove('hidden')
-                }
-            }
-        }
+    onSidebarScroll(e) {
+      this.sidebarScrollTop = e.target.scrollTop;
     },
-    mounted() {
-        this.initHotkey()
-        window.addEventListener('scroll', this.onScroll)
+    onScroll() {
+      this.scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
     },
-    destroyed() {
-        window.removeEventListener('scroll', this.onScroll)
+    switchMenu(index) {
+      this.$store.commit("menu/switchHeaderActived", index);
+      if (this.$store.state.settings.switchSidebarAndPageJump) {
+        this.$router.push(this.$store.getters["menu/sidebarRoutes"][0].path);
+      }
     },
-    methods: {
-        generateI18nTitle,
-        reload(type = 1) {
-            if (type == 1) {
-                this.isRouterAlive = false
-                this.$nextTick(() => (this.isRouterAlive = true))
-            } else {
-                this.$router.push({
-                    name: 'reload'
-                })
-            }
-        },
-        routeChange(newVal, oldVal) {
-            this.$route.meta.title && this.$store.commit('settings/setTitle', this.generateI18nTitle(this.$route.meta.i18n, this.$route.meta.title))
-            if (newVal.name == oldVal.name) {
-                this.reload()
-            }
-        },
-        initHotkey() {
-            this.$hotkeys('alt+s', e => {
-                if (this.$store.state.settings.enableNavSearch) {
-                    e.preventDefault()
-                    this.$eventBus.$emit('global-search-toggle')
-                }
-            })
-            this.$hotkeys('f5', e => {
-                if (this.$store.state.settings.enablePageReload) {
-                    e.preventDefault()
-                    this.reload(this.$store.state.settings.enableTabbar ? 1 : 2)
-                }
-            })
-        },
-        onSidebarScroll(e) {
-            this.sidebarScrollTop = e.target.scrollTop
-        },
-        onScroll() {
-            this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-        },
-        switchMenu(index) {
-            this.$store.commit('menu/switchHeaderActived', index)
-            if (this.$store.state.settings.switchSidebarAndPageJump) {
-                this.$router.push(this.$store.getters['menu/sidebarRoutes'][0].path)
-            }
-        }
-    }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-[data-layout=adaption] {
+[data-layout="adaption"] {
     #app-main {
         width: 100%;
     }
 }
-[data-layout=adaption-min-width] {
+[data-layout="adaption-min-width"] {
     #app-main {
         min-width: $g-app-width;
     }
 }
-[data-layout=center] {
+[data-layout="center"] {
     #app-main {
         width: $g-app-width;
     }
 }
-[data-layout=center-max-width] {
+[data-layout="center-max-width"] {
     #app-main {
         width: $g-app-width;
         max-width: 100%;
@@ -263,7 +335,7 @@ export default {
         }
     }
 }
-[data-mode=mobile] {
+[data-mode="mobile"] {
     #app-main {
         width: 100%;
         min-width: unset;
@@ -271,7 +343,9 @@ export default {
     }
     .sidebar-container {
         width: calc(#{$g-main-sidebar-width} + #{$g-sub-sidebar-width});
-        transform: translateX(-#{$g-main-sidebar-width}) translateX(-#{$g-sub-sidebar-width});
+        transform:
+            translateX(-#{$g-main-sidebar-width})
+            translateX(-#{$g-sub-sidebar-width});
         &.show {
             transform: translateX(0);
         }
@@ -282,7 +356,9 @@ export default {
     &[data-no-main-sidebar] {
         .sidebar-container {
             width: calc(#{$g-main-sidebar-width} + #{$g-sub-sidebar-width});
-            transform: translateX(-#{$g-main-sidebar-width}) translateX(-#{$g-sub-sidebar-width});
+            transform:
+                translateX(-#{$g-main-sidebar-width})
+                translateX(-#{$g-sub-sidebar-width});
             &.show {
                 transform: translateX(0);
             }
@@ -312,7 +388,7 @@ header {
     height: $g-header-height;
     color: #fff;
     @include themeify {
-        background-color: themed('g-header-bg');
+        background-color: themed("g-header-bg");
     }
     .header-container {
         width: $g-header-width;
@@ -355,19 +431,19 @@ header {
             cursor: pointer;
             transition: all 0.3s;
             @include themeify {
-                background-color: themed('g-header-bg');
-                color: themed('g-header-menu-color');
+                background-color: themed("g-header-bg");
+                color: themed("g-header-menu-color");
             }
             &:hover {
                 @include themeify {
-                    color: themed('g-header-menu-hover-color');
-                    background-color: themed('g-header-menu-hover-bg');
+                    color: themed("g-header-menu-hover-color");
+                    background-color: themed("g-header-menu-hover-bg");
                 }
             }
             &.active {
                 @include themeify {
-                    color: themed('g-header-menu-active-color');
-                    background-color: themed('g-header-menu-active-bg');
+                    color: themed("g-header-menu-active-color");
+                    background-color: themed("g-header-menu-active-bg");
                 }
             }
             .icon {
@@ -382,7 +458,7 @@ header {
     }
     ::v-deep .user {
         padding: 0;
-        .tools [class^=ri-] {
+        .tools [class^="ri-"] {
             color: #fff;
         }
         .user-container {
@@ -404,7 +480,7 @@ header {
         transition: transform 0.3s;
         transform: transition3d(0, 0, 0);
         @include themeify {
-            box-shadow: -1px 0 0 0 darken(themed('g-main-bg'), 10);
+            box-shadow: -1px 0 0 0 darken(themed("g-main-bg"), 10);
         }
     }
     .sidebar-mask {
@@ -442,13 +518,13 @@ header {
         z-index: 1;
         width: $g-main-sidebar-width;
         @include themeify {
-            color: themed('g-main-sidebar-menu-color');
-            background-color: themed('g-main-sidebar-bg');
+            color: themed("g-main-sidebar-menu-color");
+            background-color: themed("g-main-sidebar-bg");
         }
         .sidebar-logo {
             transition: 0.3s;
             @include themeify {
-                background-color: themed('g-main-sidebar-bg');
+                background-color: themed("g-main-sidebar-bg");
             }
         }
         .nav {
@@ -464,14 +540,14 @@ header {
                 transition: color 0.3s, background-color 0.3s;
                 &:hover {
                     @include themeify {
-                        color: themed('g-main-sidebar-menu-hover-color');
-                        background-color: themed('g-main-sidebar-menu-hover-bg');
+                        color: themed("g-main-sidebar-menu-hover-color");
+                        background-color: themed("g-main-sidebar-menu-hover-bg");
                     }
                 }
                 &.active {
                     @include themeify {
-                        color: themed('g-main-sidebar-menu-active-color');
-                        background-color: themed('g-main-sidebar-menu-active-bg');
+                        color: themed("g-main-sidebar-menu-active-color");
+                        background-color: themed("g-main-sidebar-menu-active-bg");
                     }
                 }
                 .icon {
@@ -494,8 +570,8 @@ header {
         bottom: 0;
         transition: 0.3s;
         @include themeify {
-            background-color: themed('g-sub-sidebar-bg');
-            box-shadow: 10px 0 10px -10px darken(themed('g-sub-sidebar-bg'), 20);
+            background-color: themed("g-sub-sidebar-bg");
+            box-shadow: 10px 0 10px -10px darken(themed("g-sub-sidebar-bg"), 20);
         }
         &.is-collapse {
             width: 64px;
@@ -511,23 +587,23 @@ header {
         .sidebar-logo {
             transition: box-shadow 0.2s, background-color 0.3s, color 0.3s;
             @include themeify {
-                background-color: themed('g-sub-sidebar-bg');
+                background-color: themed("g-sub-sidebar-bg");
             }
             &:not(.sidebar-logo-bg) {
                 ::v-deep span {
                     @include themeify {
-                        color: themed('g-sub-sidebar-menu-color');
+                        color: themed("g-sub-sidebar-menu-color");
                     }
                 }
             }
             &.sidebar-logo-bg {
                 @include themeify {
-                    background-color: themed('g-main-sidebar-bg');
+                    background-color: themed("g-main-sidebar-bg");
                 }
             }
             &.shadow {
                 @include themeify {
-                    box-shadow: 0 10px 10px -10px darken(themed('g-sub-sidebar-bg'), 20);
+                    box-shadow: 0 10px 10px -10px darken(themed("g-sub-sidebar-bg"), 20);
                 }
             }
         }
@@ -536,7 +612,7 @@ header {
             padding-top: $g-breadcrumb-height;
             transition: border-color 0.3s, background-color 0.3s, color 0.3s;
             @include themeify {
-                background-color: themed('g-sub-sidebar-bg');
+                background-color: themed("g-sub-sidebar-bg");
             }
             &:not(.el-menu--collapse) {
                 width: inherit;
@@ -570,8 +646,8 @@ header {
         min-height: 100%;
         transition: margin-left 0.3s;
         @include themeify {
-            background-color: themed('g-main-bg');
-            box-shadow: 1px 0 0 0 darken(themed('g-main-bg'), 10);
+            background-color: themed("g-main-bg");
+            box-shadow: 1px 0 0 0 darken(themed("g-main-bg"), 10);
         }
         .tabbar-container + .breadcrumb-container {
             top: $g-tabbar-height;

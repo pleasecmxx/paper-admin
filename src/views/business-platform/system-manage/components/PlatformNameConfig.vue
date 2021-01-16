@@ -46,7 +46,7 @@
         :height="160 + 'px'"
         :on-success="handleAvatarSuccess"
       >
-        <img v-if="imageUrl" :src="imageUrl" class="platform-logo" />
+        <el-image v-if="imageUrl" fit="contain" :src="imageUrl" class="platform-logo" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </div>
