@@ -26,6 +26,7 @@ export const platform_base_config = '/api/management/platform_base_config';
 export const platform_banner_uploader = '/api/management/platform/upload_banner';   //平台轮播上传
 export const platform_banner_list = '/api/management/platform/banner_search';  //平台轮播图列表查询
 export const platfrom_banner_delete = '/api/management/platform/banner_delete';  //平台轮播删除
+export const platform_banner_edit = '/api/management/platform/banner_edit';  //平台轮播图编辑
 
 /******** 平台-加盟渠道配置 */
 
@@ -75,3 +76,20 @@ export const editPasswordApi = 'api/management/edit_password';  //编辑密码�
 
 export const eidtChannleApi = '/api/management/channel_config_edit';  //编辑加盟渠道
 
+
+
+/********************** 素材管理 ***********************/
+
+export const addMaterial = '/api/management/upload_material'   //添加素材
+
+export const materialList = '/api/management/material_list';   //素材列表
+
+export const deleteMaterial = '/api/management/material_delete';  //删除素材
+
+/********************* 推广模版管理 *******************/
+
+export const qr_code_template_list = '/api/management/model_list';  //推广模版列表
+
+export const add_qr_code_template = '/api/management/upload_model';  //添加模版
+
+export const detele_qr_code_template = '/api/management/material_delete';   //删除模版

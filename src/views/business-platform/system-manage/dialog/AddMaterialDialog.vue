@@ -1,39 +1,17 @@
 <template>
   <div class="l-dialog-content">
     <div class="l-dialog-row l-flex-row-start">
-      <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text5">轮播图排序</p>
+        <p class="min-width-text5">素材标题</p>
         <el-input
           class="l-dialog-input"
-          v-model="sort"
-          placeholder="请输入排序（越大越靠前）"
+          v-model="title"
+          placeholder="素材标题与素材展示无关，仅用于后台标识"
           clearable
         />
-      </div>
-      <div class="l-dialog-half-row l-flex-row-start">
-        <p>权限</p>
-        <el-select v-model="status" placeholder="请选择展示权限">
-          <el-option
-            v-for="item in status_types"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </div>
     </div>
     <div class="l-dialog-row l-flex-row-start height-auto">
       <div class="l-dialog-half-row l-flex-row-start height-auto">
-        <p class="min-width-text5">链接地址</p>
-        <el-input
-          class="l-dialog-input"
-          v-model="linkUrl"
-          placeholder="请输入跳转链接地址（默认不跳转）"
-        />
-      </div>
-      <div class="l-dialog-half-row l-flex-row-start height-auto">
-        <p>logo</p>
+        <p  class="min-width-text5">素材图片</p>
         <el-upload
           class="upload-demo"
           drag
@@ -51,17 +29,10 @@
             v-if="!imageUrl.length"
           ></i>
           <div class="el-upload__text" v-if="!imageUrl.length">
-            将轮播图拖到此处，或<em>点击上传</em>
+            将图片拖到此处，或<em>点击上传</em>
           </div>
-          <img :src="imageUrl" class="after-uploader-img" v-else />
+          <el-image :src="imageUrl" fit="contain" class="after-uploader-img" v-else />
         </el-upload>
-      </div>
-    </div>
-    <div class="l-dialog-row l-flex-row-start">
-      <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text5">启用状态</p>
-        <el-switch v-model="value" active-color="#13ce66" inactive-color="#999">
-        </el-switch>
       </div>
     </div>
     <div class="l-dialog-option-footer">
@@ -79,13 +50,13 @@ import {
   comon_image_uploader,
   addChannel,
   platform_banner_uploader,
-  platform_banner_edit,
+  addMaterial,
 } from "./../../../../api/admin-api";
 import store from "@/store/index";
 import api from "../../../../api";
 
 export default {
-  name: "AddBannerDialog",
+  name: "AddMaterialDialog",
   props: {
     closeDialog: {
       type: Function,
@@ -120,8 +91,6 @@ export default {
           label: "PC和H5",
         },
       ],
-      isEdit: false,
-      editData: null,
       addLoading: false,
     };
   },
@@ -132,15 +101,6 @@ export default {
     },
   },
   methods: {
-    setEditData(data) {
-        this.isEdit = true;
-        this.editData = data;
-        this.linkUrl = data.link_url;
-        this.sort = data.sort;
-        this.imageUrl = data.url;
-        this.title = data.title;
-        console.log("编辑数据",data)
-    },
     cancelDialog() {
       this.closeDialog();
     },
@@ -163,26 +123,18 @@ export default {
     onFilePickerChange(e) {},
 
     confirmAdd() {
-      if (isEmpty(this.sort)) {
-        return this.$message.error("请输入排序");
+      if (isEmpty(this.title)) {
+        return this.$message.error("请输入素材标题");
       }
       this.addLoading = true;
       console.log(this.content);
       let params = {
-        sort: this.sort, //9809
-        status: this.status, //1\2\3
-        url: this.imageUrl, //url
-        link_url: this.linkUrl, //
-        disable: this.disable, //禁用 1 启用
+        file: this.imageUrl, //url
+        title: this.title, //
       };
-      let requestApi = platform_banner_uploader;
-      if(this.isEdit){
-          requestApi = platform_banner_edit;
-      }
-      params.id = this.editData.id;
       console.log("参数", params);
       api
-        .post(requestApi, params)
+        .post(addMaterial, params)
         .then((res) => {
           console.log(res);
           if (res.code == 200) {

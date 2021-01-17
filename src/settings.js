@@ -25,7 +25,7 @@ let globalSettings = {
      */
     theme: 'default',
     // Element 组件默认尺寸，支持：large、medium、small、mini
-    elementSize: 'large',
+    elementSize: '  ',
     // 是否显示头部
     showHeader: false,
     // 是否开启侧边栏展开收起按钮
@@ -47,7 +47,7 @@ let globalSettings = {
     copyrightCompany: 'Fantastic-admin',
     copyrightWebsite: 'https://gitee.com/hooray/fantastic-admin',
     // 是否开启导航搜索
-    enableNavSearch: true,
+    enableNavSearch: false,
     // 是否开启通知中心
     enableNotification: false,
     // 是否开启国际化

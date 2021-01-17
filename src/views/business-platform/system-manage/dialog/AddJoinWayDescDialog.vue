@@ -82,7 +82,7 @@ import {
   deepClone,
   deepCopy,
 } from "./../../../../util";
-import defaultData from "./default";
+import * as defaultData from "./default";
 
 export default {
   name: "AddJoinWayDescDialog",
@@ -195,9 +195,9 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.json1 = this.defaultJSON;
-          this.json2 = this.defaultJSON;
-          this.json3 = this.defaultJSON;
+          this.json1 = this.defaultJSON.data;
+          this.json2 = this.defaultJSON.data2;
+          this.json3 = this.defaultJSON.data3;
           this.$message({
             type: "success",
             message: "重置成功!",

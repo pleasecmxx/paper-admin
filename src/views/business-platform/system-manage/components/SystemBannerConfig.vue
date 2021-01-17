@@ -28,7 +28,7 @@
           <p v-if="scope.row.status == 3">PC和H5</p>
         </template>
       </el-table-column>
-      <el-table-column prop="link_url" label="目标地址" align="center">
+      <el-table-column prop="link_url" label="目标地址" align="center" min-width="180">
         <template slot-scope="scope">
           <el-link type="info">{{ scope.row.link_url }}</el-link>
         </template>
@@ -72,6 +72,7 @@
       :width="isPc ? '55%' : '96%'"
     >
       <add-banner-dialog
+        ref="addDialog"
         :closeDialog="closeDialog"
         @finish="onAddFinish"
         v-if="refreshKit"
@@ -131,10 +132,17 @@ export default {
           console.log(err);
         });
     },
+
     closeDialog() {
       this.dialogShow = false;
     },
-    editBanner() {},
+
+    editBanner(row) {
+      this.dialogShow = true;
+      this.$nextTick(() => {
+        this.$refs["addDialog"].setEditData(row);
+      });
+    },
 
     deleteBanner(row) {
       console.log(row);

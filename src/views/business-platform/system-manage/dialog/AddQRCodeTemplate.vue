@@ -2,40 +2,20 @@
   <div class="l-dialog-content">
     <div class="l-dialog-row l-flex-row-start">
       <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text5">轮播图排序</p>
+        <p class="min-width-text5">模版标题</p>
         <el-input
           class="l-dialog-input"
-          v-model="sort"
-          placeholder="请输入排序（越大越靠前）"
+          v-model="title"
+          placeholder="请输入模版标题"
           clearable
         />
-      </div>
-      <div class="l-dialog-half-row l-flex-row-start">
-        <p>权限</p>
-        <el-select v-model="status" placeholder="请选择展示权限">
-          <el-option
-            v-for="item in status_types"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
       </div>
     </div>
     <div class="l-dialog-row l-flex-row-start height-auto">
       <div class="l-dialog-half-row l-flex-row-start height-auto">
-        <p class="min-width-text5">链接地址</p>
-        <el-input
-          class="l-dialog-input"
-          v-model="linkUrl"
-          placeholder="请输入跳转链接地址（默认不跳转）"
-        />
-      </div>
-      <div class="l-dialog-half-row l-flex-row-start height-auto">
-        <p>logo</p>
+        <p class="min-width-text5">模版底版</p>
         <el-upload
-          class="upload-demo"
+          class="upload-qr-code"
           drag
           :action="uploaderFileUrl"
           :on-success="onUploaderSuccess"
@@ -51,17 +31,75 @@
             v-if="!imageUrl.length"
           ></i>
           <div class="el-upload__text" v-if="!imageUrl.length">
-            将轮播图拖到此处，或<em>点击上传</em>
+            将图片拖到此处，或<em>点击上传</em><br />
+            推荐尺寸宽高为：1080 x 1460
           </div>
-          <img :src="imageUrl" class="after-uploader-img" v-else />
+          <el-image
+            :src="imageUrl"
+            fit="contain"
+            class="after-uploader-img"
+            v-else
+          />
         </el-upload>
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start height-auto">
+        <p class="min-width-text5">示例</p>
+        <el-image
+          fit="contain"
+          :preview-src-list="[demo]"
+          :src="demo"
+          class="upload-qr-code"
+        />
       </div>
     </div>
     <div class="l-dialog-row l-flex-row-start">
       <div class="l-dialog-half-row l-flex-row-start">
-        <p class="min-width-text5">启用状态</p>
-        <el-switch v-model="value" active-color="#13ce66" inactive-color="#999">
-        </el-switch>
+        <p class="min-width-text5">二维码上边距</p>
+        <el-input
+          class="l-dialog-input"
+          v-model="qr_code.top_intent"
+          type="number"
+          placeholder="请输入二维码上边距"
+          clearable
+        />
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">二维码左边距</p>
+        <el-input
+          class="l-dialog-input"
+          v-model="qr_code.left_intent"
+          type="number"
+          placeholder="请输入二维码左边距"
+          clearable
+        />
+      </div>
+    </div>
+    <div class="l-dialog-row l-flex-row-start">
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">网址上边距</p>
+        <el-input
+          class="l-dialog-input"
+          v-model="link_text.top_intent"
+          type="number"
+          placeholder="请输入网址上边距"
+          clearable
+        />
+      </div>
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">字体大小</p>
+        <el-input
+          class="l-dialog-input"
+          v-model="link_text.font_size"
+          type="number"
+          placeholder="请输入网址字体大小"
+          clearable
+        />
+      </div>
+    </div>
+    <div class="l-dialog-row l-flex-row-start">
+      <div class="l-dialog-half-row l-flex-row-start">
+        <p class="min-width-text5">字体颜色</p>
+        <el-color-picker v-model="link_text.color" show-alpha></el-color-picker>
       </div>
     </div>
     <div class="l-dialog-option-footer">
@@ -79,13 +117,13 @@ import {
   comon_image_uploader,
   addChannel,
   platform_banner_uploader,
-  platform_banner_edit,
+  add_qr_code_template,
 } from "./../../../../api/admin-api";
 import store from "@/store/index";
 import api from "../../../../api";
 
 export default {
-  name: "AddBannerDialog",
+  name: "AddQRCodeTemplate",
   props: {
     closeDialog: {
       type: Function,
@@ -94,34 +132,25 @@ export default {
   },
   data() {
     return {
+      demo: require("./../../../../assets/images/template-md.png"),
       imageUrl: "",
-      value: true,
-      disable: 1,
       uploaderFileUrl: process.env.VUE_APP_API_ROOT + comon_image_uploader,
       uploaderFileExtraParams: {
         token: store.state.user.token,
       },
       title: "",
-      content: "",
-      linkUrl: "",
-      sort: 1,
-      status: "1",
-      status_types: [
-        {
-          value: "1",
-          label: "仅PC",
-        },
-        {
-          value: "2",
-          label: "仅H5",
-        },
-        {
-          value: "3",
-          label: "PC和H5",
-        },
-      ],
-      isEdit: false,
-      editData: null,
+      color: "",
+      fontSize: "",
+      qr_code: {
+        top_intent: "", //666px
+        left_intent: "", //73px
+      },
+      link_text: {
+        color: "",  //f1dd4b
+        font_size: "",    //24px
+        top_intent: "",     //242px
+      },
+      top_intent: "",
       addLoading: false,
     };
   },
@@ -132,15 +161,6 @@ export default {
     },
   },
   methods: {
-    setEditData(data) {
-        this.isEdit = true;
-        this.editData = data;
-        this.linkUrl = data.link_url;
-        this.sort = data.sort;
-        this.imageUrl = data.url;
-        this.title = data.title;
-        console.log("编辑数据",data)
-    },
     cancelDialog() {
       this.closeDialog();
     },
@@ -163,26 +183,41 @@ export default {
     onFilePickerChange(e) {},
 
     confirmAdd() {
-      if (isEmpty(this.sort)) {
-        return this.$message.error("请输入排序");
-      }
+      if (isEmpty(this.imageUrl)) {
+        return this.$message.error("请上传模版底版");
+      };
+      if (isEmpty(this.title)) {
+        return this.$message.error("请上传模版标题");
+      };
+      if (isEmpty(this.title)) {
+        return this.$message.error("请上传模版标题");
+      };
+      if (isEmpty(this.qr_code.top_intent)) {
+        return this.$message.error("请设定模版二维码上边距");
+      };
+      if (isEmpty(this.qr_code.left_intent)) {
+        return this.$message.error("请设定模版二维码左边距");
+      };
+      if (isEmpty(this.link_text.top_intent)) {
+        return this.$message.error("请设定模版网址上边距");
+      };
+      if (isEmpty(this.link_text.color)) {
+        return this.$message.error("请设定模版网址字体大小");
+      };
+      if (isEmpty(this.link_text.color)) {
+        return this.$message.error("请设定模版网址字体颜色");
+      };
       this.addLoading = true;
       console.log(this.content);
       let params = {
-        sort: this.sort, //9809
-        status: this.status, //1\2\3
-        url: this.imageUrl, //url
-        link_url: this.linkUrl, //
-        disable: this.disable, //禁用 1 启用
+        title: this.title,
+        file: this.imageUrl,
+        qr_code: JSON.stringify(this.qr_code),
+        link_text: JSON.stringify(this.link_text)
       };
-      let requestApi = platform_banner_uploader;
-      if(this.isEdit){
-          requestApi = platform_banner_edit;
-      }
-      params.id = this.editData.id;
       console.log("参数", params);
       api
-        .post(requestApi, params)
+        .post(add_qr_code_template, params)
         .then((res) => {
           console.log(res);
           if (res.code == 200) {
@@ -260,7 +295,8 @@ export default {
     /* background-color: red; */
 }
 .min-width-text5 {
-    min-width: 72px;
+    min-width: 88px;
+    text-align: right;
 
     /* background-color: red; */
 }
