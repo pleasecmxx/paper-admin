@@ -44,7 +44,7 @@ let globalSettings = {
     showCopyright: true,
     // 版权信息配置，格式为：Copyright © [dates] <company>
     copyrightDates: new Date().getFullYear(),
-    copyrightCompany: 'LWCC.net 长沙文客联有限公司',
+    copyrightCompany: 'LWCC.net 长沙文客联网络科技有限公司',
     copyrightWebsite: 'http://lwcc.net',
     // 是否开启导航搜索
     enableNavSearch: false,
