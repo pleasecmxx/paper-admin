@@ -5,7 +5,7 @@
     }" :title="title" tag="div"
     >
         <img v-if="showLogo" :src="logo" class="logo">
-        <span v-if="showTitle">{{ title }}</span>
+        <!-- <span v-if="showTitle">{{ title }}</span> -->
     </router-link>
 </template>
 
@@ -58,7 +58,7 @@ export default {
         cursor: pointer;
     }
     .logo {
-        width: 30px;
+        width: auto;
         height: 30px;
         & + span {
             margin-left: 10px;

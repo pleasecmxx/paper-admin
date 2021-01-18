@@ -598,7 +598,8 @@ header {
             }
             &.sidebar-logo-bg {
                 @include themeify {
-                    background-color: themed("g-main-sidebar-bg");
+                    // background-color: themed("g-main-sidebar-bg");
+                    background-color: #eee;
                 }
             }
             &.shadow {

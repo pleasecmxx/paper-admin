@@ -23,7 +23,7 @@
         label-position="left"
       >
         <div class="title-container">
-          <h3 class="title">{{ title }}管理后台</h3>
+          <h3 class="title">{{ title }}管理后台v1.0</h3>
         </div>
         <div>
           <el-form-item prop="account">
@@ -66,7 +66,7 @@
           @click.native.prevent="handleLogin"
           >{{ $t("app.login") }}</el-button
         >
-        <div>
+        <!-- <div>
           演示帐号一键登录：<span
             style="padding: 0 5px; cursor: pointer; color: #666;"
             @click="testAccount('admin')"
@@ -76,7 +76,7 @@
             @click="testAccount('test')"
             >test</span
           >
-        </div>
+        </div> -->
       </el-form>
     </div>
     <Copyright />

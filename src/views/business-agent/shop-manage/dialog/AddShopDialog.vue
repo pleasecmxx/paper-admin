@@ -350,6 +350,12 @@ export default {
       if (isEmpty(this.password)) {
         return this.$message.error("请设置店铺管理后台默认密码");
       }
+      if(this.account.length < 6){
+        return this.$message.error("店铺账号长度不能小于6位字符！");
+      }
+      if (this.password.length < 6) {
+        return this.$message.error("店铺管理后台默认密码不可低于6位数");
+      }
       if (isEmpty(this.imageUrl1)) {
         return this.$message.error("请上传店铺营业执照");
       }

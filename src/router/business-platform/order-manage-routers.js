@@ -21,14 +21,14 @@ export default {
                 auth: ['platform.browse','admin']
             }
         },
-        {
-            path: 'print-order-manage',
-            name: '打印订单管理',
-            component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/order-manage/PrintOrderManage'),
-            meta: {
-                title: '打印订单管理',
-                auth: ['platform.browse','admin']
-            }
-        },
+        // {
+        //     path: 'print-order-manage',
+        //     name: '打印订单管理',
+        //     component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-platform/order-manage/PrintOrderManage'),
+        //     meta: {
+        //         title: '打印订单管理',
+        //         auth: ['platform.browse','admin']
+        //     }
+        // },
     ]
 }

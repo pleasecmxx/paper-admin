@@ -34,8 +34,16 @@
             <p v-else>粘贴复制提交</p>
           </template>
         </el-table-column> -->
-        <el-table-column prop="name" label="支付方式" align="center" width="120">
-          <p>微信扫码支付</p>
+        <el-table-column
+          prop="name"
+          label="支付方式"
+          align="center"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <p v-if="scope.row.payment_method === 1">支付宝支付</p>
+            <p v-else>微信支付</p>
+          </template>
         </el-table-column>
         <el-table-column prop="name" label="支付金额" align="center" width="96">
           <template slot-scope="scope">
@@ -48,9 +56,14 @@
             <p v-else>H5/其他</p>
           </template>
         </el-table-column>
-        <el-table-column prop="franchise_channel__name" label="查重品牌" align="center" width="146">
+        <el-table-column
+          prop="franchise_channel__name"
+          label="查重品牌"
+          align="center"
+          width="146"
+        >
         </el-table-column>
-         <el-table-column prop="name" label="订单状态" align="center" width="96">
+        <el-table-column prop="name" label="订单状态" align="center" width="96">
           <template slot-scope="scope">
             <p v-if="scope.row.check_status == '1'">待检测</p>
             <p v-else-if="scope.row.check_status == '2'">检测中</p>
@@ -60,7 +73,7 @@
         </el-table-column>
         <el-table-column prop="name" label="预估佣金" align="center" width="96">
           <template slot-scope="scope">
-            <p>{{scope.row.order_estimate_commission}}</p>
+            <p>{{ scope.row.order_estimate_commission }}</p>
           </template>
         </el-table-column>
       </el-table>
@@ -99,16 +112,15 @@ export default {
     };
   },
   created() {
-
     // var date = new Date('2020-12-25T11:35:44.721');
     // console.log("时间",date.toTimeString())
     // console.log("年",date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes())
     this.getListByPage(1);
   },
   methods: {
-      formatTime(t){
-          return formatUTCTime(t)
-      },
+    formatTime(t) {
+      return formatUTCTime(t);
+    },
     currentPageChange(page) {
       console.log(page);
       this.page;

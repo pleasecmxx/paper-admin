@@ -12,15 +12,15 @@ export default {
         auth: ['shop.browse']
     },
     children: [
-        {
-            path: 'print-order-manage',
-            name: '店铺-打印订单',
-            component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-shop/order-manage/PrintOrderManage'),
-            meta: {
-                title: '打印订单管理',
-                auth: ['shop.browse']
-            }
-        },
+        // {
+        //     path: 'print-order-manage',
+        //     name: '店铺-打印订单',
+        //     component: () => import(/* webpackChunkName: 'multilevel_menu_example' */ '@/views/business-shop/order-manage/PrintOrderManage'),
+        //     meta: {
+        //         title: '打印订单管理',
+        //         auth: ['shop.browse']
+        //     }
+        // },
         {
             path: 'paper-order-manage',
             name: '店铺-查重订单',

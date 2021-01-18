@@ -166,6 +166,12 @@ export default {
       if (isEmpty(this.agentPassword)) {
         return this.$message.error("请输入代理账号密码");
       }
+      if (this.agentAccount.length < 6) {
+        return this.$message.error("代理账号长度不能少于4位");
+      }
+      if (this.agentPassword.length < 6) {
+        return this.$message.error("代理账号密码长度不能少于6位");
+      }
       let params = {
         account_number: this.agentAccount,
         password: this.agentPassword,

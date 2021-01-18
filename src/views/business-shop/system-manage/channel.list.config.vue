@@ -31,7 +31,7 @@
                 v-if="scope.row.franchise_channel_class == 1"
                 >权威系统</el-tag
               >
-              <el-tag v-else>官方系统</el-tag>
+              <el-tag v-else>优选系统</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="计费单位" align="center">

@@ -94,13 +94,13 @@
             <p
               @click="
                 openUrl(
-                  'http://www.' + scope.row.secondary_domain + '.lwcc.net'
+                  'http://' + scope.row.secondary_domain + '.lwcc.net'
                 )
               "
               class="url-link"
               title="点击打开"
             >
-              http://www.<span style="color: #f00;" v-if="scope.row.secondary_domain">{{
+              http://<span style="color: #f00;" v-if="scope.row.secondary_domain">{{
                 scope.row.secondary_domain
               }}.</span
               >lwcc.net
