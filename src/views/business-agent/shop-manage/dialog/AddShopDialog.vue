@@ -39,9 +39,9 @@
           />
           <p style="width: 100px;">&nbsp;.lwcc.net</p>
         </div>
-        <p v-else>http://www.{{ domin }}.lwcc.net（不可编辑）</p>
+        <p v-else>http://{{ domin }}.lwcc.net（不可编辑）</p>
         <div class="valid-box" v-show="!checkDominValid(domin)">
-          <p>格式有误（只允许英文、中划线）</p>
+          <p>格式有误（只允许英文、数字、中划线）</p>
         </div>
       </div>
     </div>

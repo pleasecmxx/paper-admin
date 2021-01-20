@@ -167,7 +167,7 @@ export const validDomin = (value) => {
     // let e = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/
     // let e = /^\w+$/
     // let e = /^[A-Za-z0-9-]$/
-    let e = /^[A-Za-z\-]+$/
+    let e = /^[A-Za-z\-0-9]+$/
     console.log(e.test(value))
     return e.test(value)
 }
