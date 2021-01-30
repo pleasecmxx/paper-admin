@@ -178,8 +178,8 @@ export default {
       let requestApi = platform_banner_uploader;
       if(this.isEdit){
           requestApi = platform_banner_edit;
+          params.id = this.editData.id;
       }
-      params.id = this.editData.id;
       console.log("参数", params);
       api
         .post(requestApi, params)
