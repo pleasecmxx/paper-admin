@@ -16,13 +16,13 @@
           </div>
           <system-name-config :type="1" />
         </el-tab-pane>
-        <el-tab-pane>
+        <!-- <el-tab-pane>
           <div class="l-tab-item" slot="label">
             <i class="el-icon-printer"></i>
             <span> 打印收费配置 </span>
           </div>
           <system-print-price-config :type="1" />
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>

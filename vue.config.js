@@ -53,7 +53,7 @@ const cdn = {
 const isGZIP = process.env.VUE_APP_GZIP == 'ON'
 
 const Timestamp = new Date().getTime();
-const systrem_version = '1.0.11'
+const systrem_version = '1.1.8';
 
 module.exports = {
     publicPath: '',

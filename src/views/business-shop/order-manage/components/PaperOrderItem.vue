@@ -10,30 +10,39 @@
         >
         </el-table-column>
         <el-table-column
-          prop="date"
+          prop="create_time"
           label="创建日期"
-          width="180"
+          width="240"
           align="center"
         >
           <template slot-scope="scope">
             <p>{{ formatTime(scope.row.create_time) }}</p>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="标题" align="center" width="180">
-        </el-table-column>
-        <!-- <el-table-column prop="author" label="作者" align="center" width="96">
-        </el-table-column> -->
-        <!-- <el-table-column
-          prop="name"
-          label="文件名称"
+        <el-table-column
+          prop="title"
+          label="文章标题"
           align="center"
-          width="120"
+          min-width="180"
         >
+        </el-table-column>
+        <el-table-column
+          prop="author"
+          label="文章作者"
+          align="center"
+          min-width="180"
+        >
+        </el-table-column>
+        <!-- <el-table-column label="支付时间" width="180" align="center">
           <template slot-scope="scope">
-            <p v-if="scope.row.file">{{ scope.row.file }}</p>
-            <p v-else>粘贴复制提交</p>
+            <p>{{ formatTime(scope.row.pay_time) }}</p>
           </template>
         </el-table-column> -->
+        <el-table-column prop="name" label="支付金额" align="center" width="96">
+          <template slot-scope="scope">
+            <p>¥{{ Number(scope.row.order_money).toFixed(2) }}</p>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="name"
           label="支付方式"
@@ -45,23 +54,11 @@
             <p v-else>微信支付</p>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="支付金额" align="center" width="96">
-          <template slot-scope="scope">
-            <p>¥{{ Number(scope.row.order_money).toFixed(2) }}</p>
-          </template>
-        </el-table-column>
         <el-table-column prop="name" label="订单来源" align="center" width="96">
           <template slot-scope="scope">
             <p v-if="scope.row.order_source == '1'">PC网页</p>
             <p v-else>H5/其他</p>
           </template>
-        </el-table-column>
-        <el-table-column
-          prop="franchise_channel__name"
-          label="查重品牌"
-          align="center"
-          width="146"
-        >
         </el-table-column>
         <el-table-column prop="name" label="订单状态" align="center" width="96">
           <template slot-scope="scope">
@@ -71,7 +68,14 @@
             <p v-else-if="scope.row.check_status == '4'">检测失败</p>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="预估佣金" align="center" width="96">
+        <el-table-column
+          prop="franchise_channel__name"
+          label="下单系统"
+          align="center"
+          width="146"
+        >
+        </el-table-column>
+        <el-table-column label="预估佣金" align="center" width="96">
           <template slot-scope="scope">
             <p>{{ scope.row.order_estimate_commission }}</p>
           </template>

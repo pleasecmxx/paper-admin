@@ -7,7 +7,7 @@
         border
         style="width: 100%;"
         v-loading="loading"
-    >
+      >
         <el-table-column
           prop="order_number"
           label="订单编号"
@@ -16,28 +16,55 @@
         >
         </el-table-column>
         <el-table-column
+          prop="create_time"
+          label="创建日期"
+          width="240"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <p>{{ formatTime(scope.row.create_time) }}</p>
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="title"
-          label="标题"
+          label="文章标题"
           align="center"
           min-width="180"
         >
         </el-table-column>
-        <el-table-column label="支付时间" width="180" align="center">
+        <el-table-column
+          prop="author"
+          label="文章作者"
+          align="center"
+          min-width="180"
+        >
+        </el-table-column>
+        <!-- <el-table-column label="支付时间" width="180" align="center">
           <template slot-scope="scope">
             <p>{{ formatTime(scope.row.pay_time) }}</p>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="name" label="支付金额" align="center" width="96">
           <template slot-scope="scope">
             <p>¥{{ Number(scope.row.order_money).toFixed(2) }}</p>
           </template>
         </el-table-column>
         <el-table-column
-          prop="franchise_channel__name"
-          label="查重品牌"
+          prop="name"
+          label="支付方式"
           align="center"
-          width="146"
+          width="120"
         >
+          <template slot-scope="scope">
+            <p v-if="scope.row.payment_method === 1">支付宝支付</p>
+            <p v-else>微信支付</p>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="订单来源" align="center" width="96">
+          <template slot-scope="scope">
+            <p v-if="scope.row.order_source == '1'">PC网页</p>
+            <p v-else>H5/其他</p>
+          </template>
         </el-table-column>
         <el-table-column prop="name" label="订单状态" align="center" width="96">
           <template slot-scope="scope">
@@ -46,6 +73,13 @@
             <p v-else-if="scope.row.check_status == '3'">检测完成</p>
             <p v-else-if="scope.row.check_status == '4'">检测失败</p>
           </template>
+        </el-table-column>
+        <el-table-column
+          prop="franchise_channel__name"
+          label="下单系统"
+          align="center"
+          width="146"
+        >
         </el-table-column>
         <el-table-column label="预估佣金" align="center" width="96">
           <template slot-scope="scope">
@@ -60,16 +94,14 @@
         </el-table-column>
         <el-table-column label="所属店铺" align="center" width="96">
           <template slot-scope="scope">
-            <p>{{scope.row.shop__shop_name}}</p>
+            <p>{{ scope.row.shop__shop_name }}</p>
           </template>
         </el-table-column>
         <el-table-column label="下单网址" align="center" width="240">
           <template slot-scope="scope">
             <p
               @click="
-                openUrl(
-                  'http://' + scope.row.secondary_domain + '.lwcc.net'
-                )
+                openUrl('http://' + scope.row.secondary_domain + '.lwcc.net')
               "
               class="url-link"
               title="点击打开"

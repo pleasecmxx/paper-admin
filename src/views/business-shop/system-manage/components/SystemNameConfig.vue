@@ -249,21 +249,21 @@ export default {
       if (isEmpty(this.tel)) {
         return this.$message.error("请填写店铺联系电话");
       }
-      if (isEmpty(this.alipayAccountName)) {
-        return this.$message.error("请填写支付宝收款账号");
-      }
-      if (isEmpty(this.alipayRealName)) {
-        return this.$message.error("请填写支付宝收款账号用户姓名");
-      }
-      if (isEmpty(this.shopLogo)) {
-        return this.$message.error("请填写店铺logo");
-      }
-      if (isEmpty(this.weixinPayQRcode)) {
-        return this.$message.error("请填写店铺收款二维码");
-      }
-      if (isEmpty(this.propaganda_code)) {
-        return this.$message.error("请填写店铺微信服务号二维码");
-      }
+    //   if (isEmpty(this.alipayAccountName)) {
+    //     return this.$message.error("请填写支付宝收款账号");
+    //   }
+    //   if (isEmpty(this.alipayRealName)) {
+    //     return this.$message.error("请填写支付宝收款账号用户姓名");
+    //   }
+    //   if (isEmpty(this.shopLogo)) {
+    //     return this.$message.error("请填写店铺logo");
+    //   }
+    //   if (isEmpty(this.weixinPayQRcode)) {
+    //     return this.$message.error("请填写店铺收款二维码");
+    //   }
+    //   if (isEmpty(this.propaganda_code)) {
+    //     return this.$message.error("请填写店铺微信服务号二维码");
+    //   }
       this.loading = true;
       let params = {
         shop_name: this.shopName,
